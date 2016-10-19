@@ -1,4 +1,3 @@
-Nice.scalaProject
 
 name          := "data.uniprot"
 organization  := "bio4j"
