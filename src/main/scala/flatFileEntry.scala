@@ -216,6 +216,31 @@ case object Line {
 
 case object parsers {
 
+  def entries(lines: Iterator[String]) = new Iterator[Seq[String]] {
+
+    private val rest: BufferedIterator[String] = lines.buffered
+
+    def hasNext: Boolean =
+      rest.hasNext
+
+    def next(): Seq[String] =
+      entry
+
+    @annotation.tailrec
+    private def entry_rec(acc: Array[String]): Array[String] =
+      if (rest.hasNext) {
+        if( rest.head.startsWith("//") ) {
+
+          val drop = rest.next()
+          acc
+        }
+        else entry_rec(acc :+ rest.next())
+      }
+      else acc
+
+    private def entry: Seq[String] = entry_rec(Array())
+  }
+
   import Line._
 
   // see http://stackoverflow.com/a/33521793/614394

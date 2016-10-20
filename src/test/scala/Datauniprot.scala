@@ -2,6 +2,7 @@ package bio4j.data.uniprot.test
 
 import org.scalatest.FunSuite
 
+import collection.JavaConverters._
 import bio4j.data.uniprot._
 import java.time.LocalDate
 
@@ -177,5 +178,31 @@ SQ   SEQUENCE   589 AA;  66839 MW;  D4CF69E0E818A988 CRC64;
     assert { e.date.creation == LocalDate.of(2008, 1, 15) }
     assert { e.date.sequenceLastModified == VersionedDate(LocalDate.of(2002, 6, 1), 1) }
     assert { e.date.entryLastModified == VersionedDate(LocalDate.of(2016, 9, 7), 95) }
+  }
+
+  test("parse whole SwissProt") {
+
+    parsers.entries(
+      io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
+    )
+    // .foreach(println(_))
+    .map(parsers.flatFileEntryFrom)
+    .foreach { e => e.accessionNumbers.primary }
+  }
+
+  test("read whole SwissProt") {
+
+    io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
+      .foreach { e => () }
+  }
+
+  test("read whole SwissProt Java Stream") {
+
+    import java.nio.file._
+
+    Files.lines(Paths.get("/home/edu/Downloads/sprot/uniprot_sprot.dat"))
+      .iterator()
+      .asScala
+      .foreach { e => () }
   }
 }
