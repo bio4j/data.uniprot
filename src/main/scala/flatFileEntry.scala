@@ -161,7 +161,7 @@ case object parsers {
     val seqLines = rest14
 
     FlatFileEntry(
-      ID_lines = id_lines.map(l => Line( ID, contentOf(l) )).head,
+      ID_line  = id_lines.map(l => Line( ID, contentOf(l) )).head,
       AC_lines = ac_lines.map(l => Line( AC, contentOf(l) )),
       DT_lines = dt_lines.map(l => Line( DT, contentOf(l) )),
       DE_lines = de_lines.map(l => Line( DE, contentOf(l) )),
@@ -182,7 +182,7 @@ case object parsers {
 }
 
 case class FlatFileEntry(
-  val ID_lines        : Line,
+  val ID_line         : Line,
   val AC_lines        : Seq[Line], // nonEmpty
   val DT_lines        : Seq[Line], // 3 lines
   val DE_lines        : Seq[Line], // ?
@@ -201,7 +201,33 @@ case class FlatFileEntry(
 )
 extends AnyEntry {
 
-  lazy val identification: Identification = ???
+  lazy val identification: Identification = {
+
+    val id =
+      ID_line.content.takeWhile(_ != ' ')
+
+    val statusRep =
+      ID_line.content
+        .drop(24) // magic number!
+        .takeWhile(_ != ';')
+
+    val _status: Status =
+      if(statusRep == Reviewed.asString) Reviewed else Unreviewed
+
+    val _length =
+      ID_line.content
+        .reverse
+        .drop(4) // remove ".AA "
+        .takeWhile(_ != ' ')
+        .reverse
+        .toInt
+
+    Identification(
+      entryName = id,
+      status    = _status,
+      length    = _length
+    )
+  }
 
   lazy val accessionNumbers: AccessionNumber = {
 
