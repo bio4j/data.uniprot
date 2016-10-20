@@ -2,27 +2,6 @@ package bio4j.data.uniprot
 
 import java.time.LocalDate
 
-case class FlatFileEntry(val lines: Seq[String]) extends AnyEntry {
-
-  def accessionNumbers: AccessionNumber = ???
-  def comments: Seq[Comment] = ???
-  def databaseCrossReferences: Seq[DatabaseCrossReference] = ???
-  def date: Date = ???
-  def description: Description = ???
-  def features: Seq[Feature] = ???
-  def geneNames: Seq[GeneName] = ???
-  def identification: Identification = ???
-  def keywords: Seq[Keyword] = ???
-  def organelle: Option[Organelle] = ???
-  def organismClassification: OrganismClassification = ???
-  def organismHost: Seq[TaxonomyCrossReference] = ???
-  def organismSpecies: OrganismSpecies = ???
-  def proteinExistence: ProteinExistence = ???
-  def sequence: Sequence = ???
-  def sequenceHeader: SequenceHeader = ???
-  def taxonomyCrossReference: TaxonomyCrossReference = ???
-}
-
 case object ParseAccessionNumber {
 
   def apply(acLines: Seq[Line]): Option[AccessionNumber] =
@@ -143,4 +122,144 @@ case object ParseLine {
       Line(lineType, lineContent)
     }
   }
+
+  def isOfType(lt: LineType)(line: String): Boolean =
+    (line take 2) == lt.asString
+
+  def contentOf(line: String): String =
+    line drop 5
+}
+
+case object parsers {
+
+  import ParseLine._
+
+  lazy val localDateFormatter =
+    java.time.format.DateTimeFormatter.ofPattern("dd-MMM-yyyy")
+
+  def localDateFrom(rep: String): LocalDate =
+    LocalDate.parse(rep, localDateFormatter)
+
+  // super ugly, but I don't see any simple way
+  def flatFileEntryFrom(allLines: Seq[String]): FlatFileEntry = {
+
+    val (id_lines, rest0) = allLines.span(isOfType(ID))
+    val (ac_lines, rest1) = rest0.span(isOfType(AC))
+    val (dt_lines, rest2) = rest1.span(isOfType(DT))
+    val (de_lines, rest3) = rest2.span(isOfType(DE))
+    val (gn_lines, rest4) = rest3.span(isOfType(GN))
+    val (os_lines, rest5) = rest4.span(isOfType(OS))
+    val (og_lines, rest6) = rest5.span(isOfType(OG))
+    val (ox_lines, rest7) = rest6.span(isOfType(OX))
+    val (oh_lines, rest8) = rest7.span(isOfType(OH))
+    val (cc_lines, rest9) = rest8.span(isOfType(CC))
+    val (dr_lines, rest10) = rest9.span(isOfType(DR))
+    val (pe_lines, rest11) = rest10.span(isOfType(PE))
+    val (kw_lines, rest12) = rest11.span(isOfType(KW))
+    val (ft_lines, rest13) = rest12.span(isOfType(FT))
+    val (sq_lines, rest14) = rest13.span(isOfType(SQ))
+    val seqLines = rest14
+
+    FlatFileEntry(
+      ID_lines = id_lines.map(l => Line( ID, contentOf(l) )).head,
+      AC_lines = ac_lines.map(l => Line( AC, contentOf(l) )),
+      DT_lines = dt_lines.map(l => Line( DT, contentOf(l) )),
+      DE_lines = de_lines.map(l => Line( DE, contentOf(l) )),
+      GN_lines = gn_lines.map(l => Line( GN, contentOf(l) )),
+      OS_lines = os_lines.map(l => Line( OS, contentOf(l) )),
+      OG_lines = og_lines.map(l => Line( OG, contentOf(l) )),
+      OX_lines = ox_lines.map(l => Line( OX, contentOf(l) )),
+      OH_lines = oh_lines.map(l => Line( OH, contentOf(l) )),
+      CC_lines = cc_lines.map(l => Line( CC, contentOf(l) )),
+      DR_lines = dr_lines.map(l => Line( DR, contentOf(l) )),
+      PE_lines = pe_lines.map(l => Line( PE, contentOf(l) )),
+      KW_lines = kw_lines.map(l => Line( KW, contentOf(l) )),
+      FT_lines = ft_lines.map(l => Line( FT, contentOf(l) )),
+      SQ_lines = sq_lines.map(l => Line( SQ, contentOf(l) )),
+      sequence_lines = seqLines.map(l => contentOf(l))
+    )
+  }
+}
+
+case class FlatFileEntry(
+  val ID_lines        : Line,
+  val AC_lines        : Seq[Line], // nonEmpty
+  val DT_lines        : Seq[Line], // 3 lines
+  val DE_lines        : Seq[Line], // ?
+  val GN_lines        : Seq[Line], // ?
+  val OS_lines        : Seq[Line], //
+  val OG_lines        : Seq[Line],
+  val OX_lines        : Seq[Line],
+  val OH_lines        : Seq[Line],
+  val CC_lines        : Seq[Line],
+  val DR_lines        : Seq[Line],
+  val PE_lines        : Seq[Line],
+  val KW_lines        : Seq[Line],
+  val FT_lines        : Seq[Line],
+  val SQ_lines        : Seq[Line],
+  val sequence_lines  : Seq[String]
+)
+extends AnyEntry {
+
+  lazy val identification: Identification = ???
+
+  lazy val accessionNumbers: AccessionNumber = {
+
+    val allIDs =
+      AC_lines
+        .map(_.content).mkString("")  // join all lines
+        .split(';').map(_.trim)       // split and trim values
+
+      AccessionNumber(
+        primary   = allIDs.head,
+        secondary = allIDs.tail
+      )
+  }
+
+  lazy val date: Date = {
+
+    val dates =
+      DT_lines map { l =>
+        parsers.localDateFrom( l.content.takeWhile(_ != ',') )
+      }
+
+    val versions =
+      (DT_lines drop 1)
+        .flatMap(
+          _.content.reverse
+          .drop(1)
+          .takeWhile(_ != ' ')
+          .reverse
+          .map(_.toInt)
+        )
+
+    Date(
+      dates(0),
+      sequenceLastModified  = VersionedDate(dates(1), versions(0)),
+      entryLastModified     = VersionedDate(dates(2), versions(1))
+    )
+  }
+
+  lazy val description             : Description = ???
+  lazy val geneNames               : Seq[GeneName] = ???
+  lazy val organismSpecies         : OrganismSpecies = ???
+  lazy val organelle               : Option[Organelle] = ???
+  lazy val organismClassification  : OrganismClassification = ???
+  lazy val taxonomyCrossReference  : TaxonomyCrossReference = ???
+  lazy val organismHost            : Seq[TaxonomyCrossReference] = ???
+  // skipping references; will consider doing them
+  lazy val comments                : Seq[Comment] =
+    ???
+  lazy val databaseCrossReferences : Seq[DatabaseCrossReference] =
+    ???
+  lazy val proteinExistence        : ProteinExistence =
+    ???
+  lazy val keywords                : Seq[Keyword] =
+    ???
+  lazy val features                : Seq[Feature] =
+    ???
+  lazy val sequenceHeader          : SequenceHeader =
+    ???
+  lazy val sequence                : Sequence =
+    ???
 }
