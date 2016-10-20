@@ -15,9 +15,9 @@ trait AnyEntry extends Any {
   def date                    : Date
   def description             : Description
   def geneNames               : Seq[GeneName]
-  def organismSpecies         : AnyOrganismSpecies
+  def organismSpecies         : OrganismSpecies
   def organelle               : Option[Organelle]
-  def organismClassification  : AnyOrganismClassification
+  def organismClassification  : OrganismClassification
   def taxonomyCrossReference  : TaxonomyCrossReference
   def organismHost            : Seq[TaxonomyCrossReference]
   // skipping references; will consider doing them
@@ -96,8 +96,7 @@ case class Name(
 )
 
 /* http://web.expasy.org/docs/userman.html#OS_line */
-// TODO define this
-trait AnyOrganismSpecies        extends Any
+case class OrganismSpecies(val name: String) extends AnyVal
 
 /* http://web.expasy.org/docs/userman.html#OG_line */
 sealed trait Organelle              extends Any
@@ -115,8 +114,7 @@ sealed trait Organelle              extends Any
 
 
 /* http://web.expasy.org/docs/userman.html#OC_line */
-// TODO define this
-trait AnyOrganismClassification extends Any
+case class OrganismClassification(val lineageNames: Seq[String]) extends AnyVal
 
 /* http://web.expasy.org/docs/userman.html#OX_line */
 /* http://web.expasy.org/docs/userman.html#OH_line */
