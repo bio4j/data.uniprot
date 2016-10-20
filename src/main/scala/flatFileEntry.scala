@@ -71,15 +71,17 @@ extends AnyEntry {
         parsers.localDateFrom( l.content.takeWhile(_ != ',') )
       }
 
-    val versions =
-      (DT_lines drop 1)
-        .flatMap(
-          _.content.reverse
+    val linesWithVersions: Seq[Line] = (DT_lines drop 1)
+
+    val versions: Seq[Int] =
+      linesWithVersions.map { line =>
+        line.content
+          .reverse
           .drop(1)
           .takeWhile(_ != ' ')
           .reverse
-          .map(_.toInt)
-        )
+          .toInt
+      }
 
     Date(
       dates(0),
@@ -127,6 +129,16 @@ sealed trait LineType { lazy val asString: String = toString }
   case object OS extends LineType
   case object OG extends LineType
   case object OX extends LineType
+  // reference lines begin
+  case object RN extends LineType
+  case object RP extends LineType
+  case object RC extends LineType
+  case object RX extends LineType
+  case object RG extends LineType
+  case object RA extends LineType
+  case object RT extends LineType
+  case object RL extends LineType
+  // reference lines end
   case object OH extends LineType
   case object CC extends LineType
   case object DR extends LineType
@@ -187,6 +199,17 @@ case object Line {
   def isOfType(lt: LineType)(line: String): Boolean =
     (line take 2) == lt.asString
 
+  def isReferenceLine(line: String): Boolean =
+    isOfType(RN)(line) ||
+    isOfType(RP)(line) ||
+    isOfType(RC)(line) ||
+    isOfType(RX)(line) ||
+    isOfType(RG)(line) ||
+    isOfType(RA)(line) ||
+    isOfType(RT)(line) ||
+    isOfType(RL)(line)
+
+
   def contentOf(line: String): String =
     line drop 5
 }
@@ -195,8 +218,12 @@ case object parsers {
 
   import Line._
 
+  // see http://stackoverflow.com/a/33521793/614394
   lazy val localDateFormatter =
-    java.time.format.DateTimeFormatter.ofPattern("dd-MMM-yyyy")
+    new java.time.format.DateTimeFormatterBuilder()
+      .parseCaseInsensitive()
+      .appendPattern("dd-MMM-yyyy")
+      .toFormatter(java.util.Locale.ENGLISH)
 
   def localDateFrom(rep: String): LocalDate =
     LocalDate.parse(rep, localDateFormatter)
@@ -213,7 +240,8 @@ case object parsers {
     val (og_lines, rest6) = rest5.span(isOfType(OG))
     val (ox_lines, rest7) = rest6.span(isOfType(OX))
     val (oh_lines, rest8) = rest7.span(isOfType(OH))
-    val (cc_lines, rest9) = rest8.span(isOfType(CC))
+    // drop ref lines
+    val (cc_lines, rest9) = rest8.dropWhile(isReferenceLine).span(isOfType(CC))
     val (dr_lines, rest10) = rest9.span(isOfType(DR))
     val (pe_lines, rest11) = rest10.span(isOfType(PE))
     val (kw_lines, rest12) = rest11.span(isOfType(KW))
