@@ -42,15 +42,6 @@ sealed trait Status {
 }
 case object Reviewed    extends Status
 case object Unreviewed  extends Status
-case object Status {
-
-  def fromString(value: String): Option[Status] =
-    value match {
-      case Reviewed.asString    => Some(Reviewed)
-      case Unreviewed.asString  => Some(Unreviewed)
-      case _                    => None
-    }
-}
 
 /* http://web.expasy.org/docs/userman.html#AC_line */
 trait AnyAccessionNumber        extends Any {
