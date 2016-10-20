@@ -130,22 +130,22 @@ sealed trait Comment               extends Any
     val isEntry : Boolean
   ) extends Comment
   /* All this classes contain more information than a simple text; the format, however, is loosely defined. */
-  case class BiophysicochemicalProperties(val text: String)   extends Comment
-  case class Biotechnology(val text: String)                  extends Comment
-  case class CatalyticActivity(val text: String)              extends Comment
-  case class Caution(val text: String)                        extends Comment
-  case class Cofactor(val text: String)                       extends Comment
-  case class DevelopmentalStage(val text: String)             extends Comment
-  case class Disease(val text: String)                        extends Comment
-  case class DisruptionPhenotype(val text: String)            extends Comment
-  case class Domain(val text: String)                         extends Comment
-  case class EnzymeRegulation(val text: String)               extends Comment
-  case class Function(val text: String)                       extends Comment
-  case class Induction(val text: String)                      extends Comment
-  case class Interaction(val text: String)                    extends Comment
-  case class MassSpectrometry(val text: String)               extends Comment
-  case class Miscellaneous(val text: String)                  extends Comment
-  case class Pathway(val text: String)                        extends Comment
+  case class BiophysicochemicalProperties(val text: String)   extends AnyVal with Comment
+  case class Biotechnology(val text: String)                  extends AnyVal with Comment
+  case class CatalyticActivity(val text: String)              extends AnyVal with Comment
+  case class Caution(val text: String)                        extends AnyVal with Comment
+  case class Cofactor(val text: String)                       extends AnyVal with Comment
+  case class DevelopmentalStage(val text: String)             extends AnyVal with Comment
+  case class Disease(val text: String)                        extends AnyVal with Comment
+  case class DisruptionPhenotype(val text: String)            extends AnyVal with Comment
+  case class Domain(val text: String)                         extends AnyVal with Comment
+  case class EnzymeRegulation(val text: String)               extends AnyVal with Comment
+  case class Function(val text: String)                       extends AnyVal with Comment
+  case class Induction(val text: String)                      extends AnyVal with Comment
+  case class Interaction(val text: String)                    extends AnyVal with Comment
+  case class MassSpectrometry(val text: String)               extends AnyVal with Comment
+  case class Miscellaneous(val text: String)                  extends AnyVal with Comment
+  case class Pathway(val text: String)                        extends AnyVal with Comment
   // TODO etc etc; comments are missing here
 
 /* http://web.expasy.org/docs/userman.html#DR_line */
