@@ -174,7 +174,6 @@ SQ   SEQUENCE   589 AA;  66839 MW;  D4CF69E0E818A988 CRC64;
     assert { e.accessionNumbers.primary == "Q8R060" }
     assert { e.accessionNumbers.secondary == Seq("Q9D2E4", "Q9D761") }
     // DT line
-    println { e.DT_lines }
     assert { e.date.creation == LocalDate.of(2008, 1, 15) }
     assert { e.date.sequenceLastModified == VersionedDate(LocalDate.of(2002, 6, 1), 1) }
     assert { e.date.entryLastModified == VersionedDate(LocalDate.of(2016, 9, 7), 95) }
