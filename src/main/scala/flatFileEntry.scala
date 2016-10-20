@@ -2,61 +2,6 @@ package bio4j.data.uniprot
 
 import java.time.LocalDate
 
-case object ParseAccessionNumber {
-
-  def apply(acLines: Seq[Line]): Option[AccessionNumber] =
-    ???
-}
-
-case object ParseIdentification {
-
-  def apply(idLine: Line): Option[Identification] =
-    idLine.ofType(ID) flatMap { line =>
-
-      val id =
-        line.content.takeWhile(_ != ' ')
-
-      val statusRep =
-        line.content
-          .drop(24)
-          .takeWhile(_ != ';')
-
-      val length =
-        line.content
-          .reverse
-          .drop(4) // remove ".AA "
-          .takeWhile(_ != ' ')
-          .reverse
-
-      // TODO parse status, map on option for nonempty stuff etc
-      ???
-    }
-}
-
-case object ParseAccession {
-
-  def apply(acLines: Seq[Line]): Option[AccessionNumber] = {
-
-    val validLines: Seq[Line] =
-      acLines.filter(_.isOfType(AC))
-
-    val allIDs =
-      validLines
-        .map(_.content).mkString("")  // join all lines
-        .split(';').map(_.trim)       // split and trim values
-
-    val primaryID = allIDs.headOption
-
-    primaryID map { id =>
-      AccessionNumber(
-        primary   = id,
-        secondary = allIDs.tail
-      )
-    }
-  }
-}
-
-
 sealed trait LineType { lazy val asString: String = toString }
   case object ID extends LineType
   case object AC extends LineType
@@ -109,9 +54,9 @@ case class Line(
     lineType == some
 }
 
-case object ParseLine {
+case object Line {
 
-  def apply(line: String): Option[Line] = {
+  def from(line: String): Option[Line] = {
 
     val lineTypeRep = line take 2
 
@@ -132,7 +77,7 @@ case object ParseLine {
 
 case object parsers {
 
-  import ParseLine._
+  import Line._
 
   lazy val localDateFormatter =
     java.time.format.DateTimeFormatter.ofPattern("dd-MMM-yyyy")
