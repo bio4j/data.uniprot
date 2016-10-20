@@ -10,11 +10,11 @@ import java.time.LocalDate
 // NOTE not sure about all these `Any`s being of any use
 trait AnyEntry extends Any {
 
-  def identification          : AnyIdentification
-  def accessionNumbers        : Seq[AnyIdentification]
-  def date                    : AnyDate
-  def description             : AnyDescription
-  def geneNames               : Seq[AnyGeneName]
+  def identification          : Identification
+  def accessionNumbers        : AccessionNumber
+  def date                    : Date
+  def description             : Description
+  def geneNames               : Seq[GeneName]
   def organismSpecies         : AnyOrganismSpecies
   def organelle               : Option[AnyOrganelle]
   def organismClassification  : AnyOrganismClassification
@@ -31,34 +31,28 @@ trait AnyEntry extends Any {
 }
 
 /* http://web.expasy.org/docs/userman.html#ID_line */
-trait AnyIdentification         extends Any {
+case class Identification(
+  val entryName : String,
+  val status    : Status,
+  val length    : Int
+)
 
-  def entryName : String
-  def status    : Status
-  def length    : Int
-}
-
-sealed trait Status {
-
-  lazy val asString = toString
-}
-case object Reviewed    extends Status
-case object Unreviewed  extends Status
+sealed trait Status { lazy val asString = toString }
+  case object Reviewed    extends Status
+  case object Unreviewed  extends Status
 
 /* http://web.expasy.org/docs/userman.html#AC_line */
-trait AnyAccessionNumber        extends Any {
-
-  def primary   : String
-  def secondary : Seq[String]
-}
+case class AccessionNumber(
+  val primary   : String,
+  val secondary : Seq[String]
+)
 
 /* http://web.expasy.org/docs/userman.html#DT_line */
-trait AnyDate                   extends Any {
-
-  def creation              : LocalDate
-  def sequenceLastModified  : VersionedDate
-  def entryLastModified     : VersionedDate
-}
+case class Date(
+  val creation              : LocalDate,
+  val sequenceLastModified  : VersionedDate,
+  val entryLastModified     : VersionedDate
+)
 
 case class VersionedDate(
   val date          : LocalDate,
@@ -66,12 +60,11 @@ case class VersionedDate(
 )
 
 /* http://web.expasy.org/docs/userman.html#DE_line */
-trait AnyDescription            extends Any {
-
-  def recommendedName   : RecommendedName
-  def alternativeNames  : Seq[AlternativeName]
-  def submittedNames    : Seq[SubmittedName]
-}
+case class Description(
+  val recommendedName   : RecommendedName,
+  val alternativeNames  : Seq[AlternativeName],
+  val submittedNames    : Seq[SubmittedName]
+)
 
 case class RecommendedName(
   val full  : String,
@@ -91,12 +84,11 @@ case class SubmittedName(
 )
 
 /* http://web.expasy.org/docs/userman.html#GN_line */
-trait AnyGeneName               extends Any {
-
-  def name              : Option[Name]
-  def orderedLocusNames : Seq[String]
-  def ORFNames          : Seq[String]
-}
+case class GeneName(
+  val name              : Option[Name],
+  val orderedLocusNames : Seq[String],
+  val ORFNames          : Seq[String]
+)
 
 case class Name(
   val official  : String,
