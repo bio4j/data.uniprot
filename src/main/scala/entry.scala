@@ -146,7 +146,18 @@ sealed trait Comment               extends Any
   case class MassSpectrometry(val text: String)               extends AnyVal with Comment
   case class Miscellaneous(val text: String)                  extends AnyVal with Comment
   case class Pathway(val text: String)                        extends AnyVal with Comment
-  // TODO etc etc; comments are missing here
+  case class Pharmaceutical(val text: String)                 extends AnyVal with Comment
+  case class Polymorphism(val text: String)                   extends AnyVal with Comment
+  case class PTM(val text: String)                            extends AnyVal with Comment
+  case class RNAEditing(val text: String)                     extends AnyVal with Comment
+  case class SequenceCaution(val text: String)                extends AnyVal with Comment
+  case class Similarity(val text: String)                     extends AnyVal with Comment
+  case class SubcellularLocation(val text: String)            extends AnyVal with Comment
+  case class Subunit(val text: String)                        extends AnyVal with Comment
+  case class TissueSpecificity(val text: String)              extends AnyVal with Comment
+  case class ToxicDose(val text: String)                      extends AnyVal with Comment
+  case class WebResource(val text: String)                    extends AnyVal with Comment
+
 
 /* http://web.expasy.org/docs/userman.html#DR_line */
 case class DatabaseCrossReference(
