@@ -161,6 +161,8 @@ case class DatabaseCrossReference(
   val otherInformation  : Option[String],
   val isoformID         : Option[String]
 )
+
+/* All these resource abbreviations have an `asString` field which matches their String representation in all UniProt data. */
 sealed trait AnyResourceAbbreviation {
 
   lazy val asString: String = toString
