@@ -21,7 +21,7 @@ trait AnyEntry extends Any {
   def taxonomyCrossReference  : TaxonomyCrossReference
   def organismHost            : Seq[TaxonomyCrossReference]
   // skipping references; will consider doing them
-  def comments                : Seq[AnyComment]
+  def comments                : Seq[Comment]
   def databaseCrossReferences : Seq[DatabaseCrossReference]
   def proteinExistence        : ProteinExistence
   def keywords                : Seq[Keyword]
@@ -121,31 +121,31 @@ case class OrganismClassification(val lineageNames: Seq[String]) extends AnyVal
 case class TaxonomyCrossReference(val taxonID: String) extends AnyVal
 
 /* http://web.expasy.org/docs/userman.html#CC_line */
-sealed trait AnyComment               extends Any
-  case class Allergen(val text: String) extends AnyVal with AnyComment
+sealed trait Comment               extends Any
+  case class Allergen(val text: String) extends AnyVal with Comment
   case class Isoform(
     val name    : String,
     val id      : String,
     // val event   : String, // NOTE needed?
     val isEntry : Boolean
-  ) extends AnyComment
+  ) extends Comment
   /* All this classes contain more information than a simple text; the format, however, is loosely defined. */
-  case class BiophysicochemicalProperties(val text: String)   extends AnyComment
-  case class Biotechnology(val text: String)                  extends AnyComment
-  case class CatalyticActivity(val text: String)              extends AnyComment
-  case class Caution(val text: String)                        extends AnyComment
-  case class Cofactor(val text: String)                       extends AnyComment
-  case class DevelopmentalStage(val text: String)             extends AnyComment
-  case class Disease(val text: String)                        extends AnyComment
-  case class DisruptionPhenotype(val text: String)            extends AnyComment
-  case class Domain(val text: String)                         extends AnyComment
-  case class EnzymeRegulation(val text: String)               extends AnyComment
-  case class Function(val text: String)                       extends AnyComment
-  case class Induction(val text: String)                      extends AnyComment
-  case class Interaction(val text: String)                    extends AnyComment
-  case class MassSpectrometry(val text: String)               extends AnyComment
-  case class Miscellaneous(val text: String)                  extends AnyComment
-  case class Pathway(val text: String)                        extends AnyComment
+  case class BiophysicochemicalProperties(val text: String)   extends Comment
+  case class Biotechnology(val text: String)                  extends Comment
+  case class CatalyticActivity(val text: String)              extends Comment
+  case class Caution(val text: String)                        extends Comment
+  case class Cofactor(val text: String)                       extends Comment
+  case class DevelopmentalStage(val text: String)             extends Comment
+  case class Disease(val text: String)                        extends Comment
+  case class DisruptionPhenotype(val text: String)            extends Comment
+  case class Domain(val text: String)                         extends Comment
+  case class EnzymeRegulation(val text: String)               extends Comment
+  case class Function(val text: String)                       extends Comment
+  case class Induction(val text: String)                      extends Comment
+  case class Interaction(val text: String)                    extends Comment
+  case class MassSpectrometry(val text: String)               extends Comment
+  case class Miscellaneous(val text: String)                  extends Comment
+  case class Pathway(val text: String)                        extends Comment
   // TODO etc etc; comments are missing here
 
 /* http://web.expasy.org/docs/userman.html#DR_line */
