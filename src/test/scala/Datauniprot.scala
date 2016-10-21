@@ -61,7 +61,7 @@ class FlatFileEntryTests extends FunSuite {
     .foreach { e => () }
   }
 
-  test("parse whole SwissProt, access some data") {
+  ignore("parse whole SwissProt, access some data") {
 
     parsers.entries(
       io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
@@ -70,14 +70,14 @@ class FlatFileEntryTests extends FunSuite {
     .foreach { e =>
 
       val z = e.accessionNumbers.primary
-      val u = e.date.creation
+      // val u = e.date.creation
       val v = e.identification.status
 
       e.description.recommendedName.foreach { n => if(n.full.isEmpty) println("empty full name!!") }
     }
   }
 
-  test("All SwissProt entries have a full name") {
+  ignore("All SwissProt entries have a full name") {
 
     val noOfEntries = 551987
 

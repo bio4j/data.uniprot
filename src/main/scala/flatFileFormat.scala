@@ -22,14 +22,16 @@ case class ID(val value: String) extends AnyVal {
         .drop(24) // magic number!
         .takeWhile(_ != ';')
 
-    if(statusStr == Reviewed) Reviewed else Unreviewed
+    if(statusStr == Reviewed.asString) Reviewed else Unreviewed
   }
 
   def length: Int =
     value
       .trim
       .stripSuffix(" AA.")
+      .reverse
       .takeWhile(_ != ' ')
+      .reverse
       .toInt
 }
 

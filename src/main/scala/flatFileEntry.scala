@@ -34,6 +34,8 @@ extends AnyEntry {
     lazy val accesions =
       ac.accesions
 
+    println { accesions }
+
     AccessionNumber(
       primary   = accesions.head,
       secondary = accesions.tail
