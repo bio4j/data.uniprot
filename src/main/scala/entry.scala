@@ -61,7 +61,7 @@ case class VersionedDate(
 
 /* http://web.expasy.org/docs/userman.html#DE_line */
 case class Description(
-  val recommendedName   : RecommendedName,
+  val recommendedName   : Option[RecommendedName],
   val alternativeNames  : Seq[AlternativeName],
   val submittedNames    : Seq[SubmittedName]
 )

@@ -90,7 +90,62 @@ extends AnyEntry {
     )
   }
 
-  lazy val description: Description = ???
+  lazy val description: Description = {
+
+    // if there's a recommended name, the content starts with 'RecName:'; otherwhise there's none
+    // note that there's *always* a DE line, we just don't know what it is
+    // both values here cannot be empty
+    val (recNameLines, rest) = DE_lines.span(_.content.startsWith("RecName:"))
+    val recNameLine = recNameLines.headOption
+
+    val fullNameOpt =
+      recNameLine map { l =>
+
+        val z =
+          l.content
+            .trim
+            .stripPrefix("RecName: Full=")
+            .stripSuffix(";")
+
+        // they sometimes have some funny '{ECO:0000255|HAMAP-Rule:MF_01588}' stuff at the end
+        if(z.endsWith("}"))
+          z.reverse.dropWhile(_ != '{').stripPrefix("{").reverse.trim
+        else
+          z
+      }
+
+    val (shortNames: Seq[String], ecNames: Seq[String]) = recNameLine.fold[(Seq[String], Seq[String])](( Seq(),Seq() ))(l => {
+
+      val restRecNameLinesTrimmed: Seq[String] =
+        rest
+          .map(_.content)
+          .takeWhile(_.startsWith("        "))
+          .map(_.trim)
+
+      (
+        restRecNameLinesTrimmed.filter(_.trim.startsWith("Short="))
+          .map(_.stripPrefix("Short=").stripSuffix(";"))
+        ,
+        restRecNameLinesTrimmed.filter(_.trim.startsWith("EC="))
+          .map(_.stripPrefix("EC=").stripSuffix(";"))
+      )
+    }
+    )
+
+    val ret1 = fullNameOpt.map { fn =>
+      RecommendedName(
+        full  = fn,
+        short = shortNames,
+        ec    = ecNames
+      )
+    }
+
+    Description(
+      recommendedName = ret1,
+      alternativeNames = Seq(),
+      submittedNames = Seq()
+    )
+  }
 
   lazy val geneNames: Seq[GeneName] = ???
 

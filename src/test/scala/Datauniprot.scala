@@ -8,6 +8,92 @@ import java.time.LocalDate
 
 class FlatFileEntryTests extends FunSuite {
 
+  test("can parse sample entry") {
+
+    val entryLines =
+      entry.split('\n').dropWhile(_.isEmpty)
+
+    val e =
+      parsers.flatFileEntryFrom(entryLines)
+
+    // ID line
+    assert { e.identification.entryName == "ZWILC_MOUSE" }
+    assert { e.identification.status == Reviewed }
+    assert { e.identification.length == 589 }
+    // AC line
+    assert { e.accessionNumbers.primary == "Q8R060" }
+    assert { e.accessionNumbers.secondary == Seq("Q9D2E4", "Q9D761") }
+    // DT line
+    assert { e.date.creation == LocalDate.of(2008, 1, 15) }
+    assert { e.date.sequenceLastModified == VersionedDate(LocalDate.of(2002, 6, 1), 1) }
+    assert { e.date.entryLastModified == VersionedDate(LocalDate.of(2016, 9, 7), 95) }
+    // DE line
+    assert {
+      e.description == Description(
+        Some(RecommendedName("Protein zwilch homolog", Seq(), Seq())),
+        Seq(),
+        Seq()
+      )
+    }
+  }
+
+  ignore("read whole SwissProt") {
+
+    io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
+      .foreach { e => () }
+  }
+
+  ignore("read whole SwissProt Java Stream") {
+
+    import java.nio.file._
+
+    Files.lines(Paths.get("/home/edu/Downloads/sprot/uniprot_sprot.dat"))
+      .iterator()
+      .asScala
+      .foreach { e => () }
+  }
+
+  ignore("split whole SwissProt into entry lines") {
+
+    parsers.entries(
+      io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
+    )
+    .foreach { e => () }
+  }
+
+  test("parse whole SwissProt, access some data") {
+
+    parsers.entries(
+      io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
+    )
+    .map(parsers.flatFileEntryFrom)
+    .foreach { e =>
+
+      val z = e.accessionNumbers.primary
+      val u = e.date.creation
+      val v = e.identification.status
+
+      e.description.recommendedName.foreach { n => if(n.full.isEmpty) println("empty full name!!") }
+    }
+  }
+
+  test("All SwissProt entries have a full name") {
+
+    val noOfEntries = 551987
+
+    val fullNameCount =
+      parsers.entries(
+        io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
+      )
+      .map(parsers.flatFileEntryFrom)
+      .foldLeft(0){ (acc, e) =>
+
+        acc + e.description.recommendedName.fold(0){_ => 1}
+      }
+
+    assert { fullNameCount == noOfEntries }
+  }
+
   lazy val entry =
 """
 ID   ZWILC_MOUSE             Reviewed;         589 AA.
@@ -158,51 +244,4 @@ SQ   SEQUENCE   589 AA;  66839 MW;  D4CF69E0E818A988 CRC64;
      PQHELLFSLT QSCIKYYKQN PLDEQHIFQL PVRPAAVKNL YQSEKPQKWR VELSNSQKRV
      KTVWQLSDSS PVDHSSFHRP EFPELTLNGS LEERTAFVNM LTCSQVHFK
 """
-
-  test("can parse sample entry") {
-
-    val entryLines =
-      entry.split('\n').dropWhile(_.isEmpty)
-
-    val e =
-      parsers.flatFileEntryFrom(entryLines)
-
-    // ID line
-    assert { e.identification.entryName == "ZWILC_MOUSE" }
-    assert { e.identification.status == Reviewed }
-    assert { e.identification.length == 589 }
-    // AC line
-    assert { e.accessionNumbers.primary == "Q8R060" }
-    assert { e.accessionNumbers.secondary == Seq("Q9D2E4", "Q9D761") }
-    // DT line
-    assert { e.date.creation == LocalDate.of(2008, 1, 15) }
-    assert { e.date.sequenceLastModified == VersionedDate(LocalDate.of(2002, 6, 1), 1) }
-    assert { e.date.entryLastModified == VersionedDate(LocalDate.of(2016, 9, 7), 95) }
-  }
-
-  test("parse whole SwissProt") {
-
-    parsers.entries(
-      io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
-    )
-    // .foreach(println(_))
-    .map(parsers.flatFileEntryFrom)
-    .foreach { e => e.accessionNumbers.primary }
-  }
-
-  test("read whole SwissProt") {
-
-    io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
-      .foreach { e => () }
-  }
-
-  test("read whole SwissProt Java Stream") {
-
-    import java.nio.file._
-
-    Files.lines(Paths.get("/home/edu/Downloads/sprot/uniprot_sprot.dat"))
-      .iterator()
-      .asScala
-      .foreach { e => () }
-  }
 }
