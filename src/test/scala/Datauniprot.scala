@@ -14,7 +14,7 @@ class FlatFileEntryTests extends FunSuite {
       entry.split('\n').dropWhile(_.isEmpty)
 
     val e =
-      parsers.flatFileEntryFrom(entryLines)
+      FlatFileEntry.from(entryLines)
 
     // ID line
     assert { e.identification.entryName == "ZWILC_MOUSE" }
@@ -66,7 +66,7 @@ class FlatFileEntryTests extends FunSuite {
     parsers.entries(
       io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
     )
-    .map(parsers.flatFileEntryFrom)
+    .map(FlatFileEntry.from)
     .foreach { e =>
 
       val z = e.accessionNumbers.primary
@@ -85,7 +85,7 @@ class FlatFileEntryTests extends FunSuite {
       parsers.entries(
         io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
       )
-      .map(parsers.flatFileEntryFrom)
+      .map(FlatFileEntry.from)
       .foldLeft(0){ (acc, e) =>
 
         acc + e.description.recommendedName.fold(0){_ => 1}
