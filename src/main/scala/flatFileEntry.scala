@@ -3,9 +3,9 @@ package bio4j.data.uniprot
 import java.time.LocalDate
 
 case class FlatFileEntry(
-  val ID_line         : Line,
-  val AC_lines        : Seq[Line], // nonEmpty
-  val DT_lines        : Seq[Line], // 3 lines
+  val id: ID,
+  val ac: AC,
+  val dt: DT, // 3 lines
   val DE_lines        : Seq[Line], // ?
   val GN_lines        : Seq[Line], // ?
   val OS_lines        : Seq[Line], //
@@ -22,72 +22,30 @@ case class FlatFileEntry(
 )
 extends AnyEntry {
 
-  lazy val identification: Identification = {
-
-    val id =
-      ID_line.content.takeWhile(_ != ' ')
-
-    val statusRep =
-      ID_line.content
-        .drop(24) // magic number!
-        .takeWhile(_ != ';')
-
-    val _status: Status =
-      if(statusRep == Reviewed.asString) Reviewed else Unreviewed
-
-    val _length =
-      ID_line.content
-        .reverse
-        .drop(4) // remove ".AA "
-        .takeWhile(_ != ' ')
-        .reverse
-        .toInt
-
+  lazy val identification: Identification =
     Identification(
-      entryName = id,
-      status    = _status,
-      length    = _length
+      entryName = id.id,
+      status    = id.status,
+      length    = id.length
     )
-  }
 
   lazy val accessionNumbers: AccessionNumber = {
 
-    val allIDs =
-      AC_lines
-        .map(_.content).mkString("")  // join all lines
-        .split(';').map(_.trim)       // split and trim values
+    lazy val accesions =
+      ac.accesions
 
-      AccessionNumber(
-        primary   = allIDs.head,
-        secondary = allIDs.tail
-      )
-  }
-
-  lazy val date: Date = {
-
-    val dates =
-      DT_lines map { l =>
-        parsers.localDateFrom( l.content.takeWhile(_ != ',') )
-      }
-
-    val linesWithVersions: Seq[Line] = (DT_lines drop 1)
-
-    val versions: Seq[Int] =
-      linesWithVersions.map { line =>
-        line.content
-          .reverse
-          .drop(1)
-          .takeWhile(_ != ' ')
-          .reverse
-          .toInt
-      }
-
-    Date(
-      dates(0),
-      sequenceLastModified  = VersionedDate(dates(1), versions(0)),
-      entryLastModified     = VersionedDate(dates(2), versions(1))
+    AccessionNumber(
+      primary   = accesions.head,
+      secondary = accesions.tail
     )
   }
+
+  lazy val date: Date =
+    Date(
+      creation              = dt.creation,
+      sequenceLastModified  = dt.sequenceLastModified,
+      entryLastModified     = dt.entryLastModified
+    )
 
   lazy val description: Description = {
 
@@ -257,9 +215,9 @@ case object FlatFileEntry {
     val seqLines = rest14
 
     FlatFileEntry(
-      ID_line  = id_lines.map(l => Line( ID, contentOf(l) )).head,
-      AC_lines = ac_lines.map(l => Line( AC, contentOf(l) )),
-      DT_lines = dt_lines.map(l => Line( DT, contentOf(l) )),
+      id  = ID( contentOf(id_lines.head) ),
+      ac  = AC( ac_lines.map(contentOf(_)) ),
+      dt  = DT( dt_lines.map(contentOf(_)) ),
       DE_lines = de_lines.map(l => Line( DE, contentOf(l) )),
       GN_lines = gn_lines.map(l => Line( GN, contentOf(l) )),
       OS_lines = os_lines.map(l => Line( OS, contentOf(l) )),

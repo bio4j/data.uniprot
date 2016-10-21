@@ -1,6 +1,99 @@
 package bio4j.data.uniprot
 
 import java.time.LocalDate
+import seqOps._
+
+/*
+  ## Line classes
+
+  These classes correspond to each line type, with their value being the corresponding lines in an entry, stripped of their prefix and space.
+
+  All parsing happens here in each of these classes, so that they are easily testable independently.
+*/
+case class ID(val value: String) extends AnyVal {
+
+  def id: String =
+    value takeWhile { _ != ' ' }
+
+  def status: Status = {
+
+    val statusStr =
+      value
+        .drop(24) // magic number!
+        .takeWhile(_ != ';')
+
+    if(statusStr == Reviewed) Reviewed else Unreviewed
+  }
+
+  def length: Int =
+    value
+      .trim
+      .stripSuffix(" AA.")
+      .takeWhile(_ != ' ')
+      .toInt
+}
+
+case class AC(val lines: Seq[String]) extends AnyVal {
+
+  private def joinedLines: String =
+    lines.mkString("")
+
+  def accesions: Seq[String] =
+    joinedLines
+      .splitSegments(_ == ';')
+      .map(_.trim)
+}
+
+case class DT(val value: Seq[String]) {
+
+  private lazy val dates: Seq[LocalDate] =
+    value
+      .map( l => parsers.localDateFrom( l takeWhile { _ != ',' } ) )
+
+  private lazy val versions: Seq[Int] =
+    value
+      .drop(1)
+      .map(line =>
+        line
+          .reverse
+          .drop(1)
+          .takeWhile(_ != ' ')
+          .reverse
+          .toInt
+      )
+
+  def creation: LocalDate =
+    dates(0)
+
+  def sequenceLastModified: VersionedDate =
+    VersionedDate(dates(1), versions(0))
+
+  def entryLastModified: VersionedDate =
+    VersionedDate(dates(2), versions(1))
+}
+
+case class DE(val value: Seq[String])
+case class GN(val value: Seq[String])
+case class OS(val value: Seq[String])
+case class OG(val value: Seq[String])
+case class OX(val value: Seq[String])
+case class RN(val value: Seq[String])
+case class RP(val value: Seq[String])
+case class RC(val value: Seq[String])
+case class RX(val value: Seq[String])
+case class RG(val value: Seq[String])
+case class RA(val value: Seq[String])
+case class RT(val value: Seq[String])
+case class RL(val value: Seq[String])
+case class OH(val value: Seq[String])
+case class CC(val value: Seq[String])
+case class DR(val value: Seq[String])
+case class PE(val value: Seq[String])
+case class KW(val value: Seq[String])
+case class FT(val value: Seq[String])
+case class SQ(val value: Seq[String])
+
+
 
 sealed trait LineType { lazy val asString: String = toString }
   case object ID extends LineType
