@@ -95,6 +95,24 @@ case object Line {
 
   def contentOf(line: String): String =
     line drop 5
+
+  import seqOps._
+
+  implicit class LineOps(val line: Line) extends AnyVal {
+
+    def splitAtSemicolon: Seq[String] =
+      line.content.splitSegments(_ == ';').map(_.trim)
+  }
+
+  implicit class LinesOps(val lines: Seq[Line]) extends AnyVal {
+
+    def join: Option[Line] = {
+
+      val newContent = lines.map(_.content).mkString("")
+
+      if(lines.isEmpty) None else Some(Line(lines.head.lineType, newContent))
+    }
+  }
 }
 
 case object parsers {
