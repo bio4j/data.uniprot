@@ -245,3 +245,18 @@ SQ   SEQUENCE   589 AA;  66839 MW;  D4CF69E0E818A988 CRC64;
      KTVWQLSDSS PVDHSSFHRP EFPELTLNGS LEERTAFVNM LTCSQVHFK
 """
 }
+
+class SeqOpsTests extends FunSuite {
+
+  test("splitSegments") {
+
+    import seqOps._
+
+    val z = Seq(0,1,2,3,4,5,6,7,8,9,10,11,12,13)
+
+    val pred = { x: Int => x % 3 == 0 }
+
+    assert { (z splitSegments pred) == Seq(Seq(1,2), Seq(4,5), Seq(7,8), Seq(10,11), Seq(13) ) }
+  }
+
+}
