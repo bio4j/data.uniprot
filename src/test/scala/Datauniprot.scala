@@ -75,8 +75,13 @@ class FlatFileEntryTests extends FunSuite {
 
   test("parse whole SwissProt") {
 
+    import java.nio.file._
+
     parsers.entries(
-      io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
+      // io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
+      Files.lines(Paths.get("/home/edu/Downloads/sprot/uniprot_sprot.dat"))
+        .iterator()
+        .asScala
     )
     .map(FlatFileEntry.from)
     .foreach { e => () }
