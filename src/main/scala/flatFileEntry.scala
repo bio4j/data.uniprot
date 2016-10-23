@@ -1,12 +1,13 @@
 package bio4j.data.uniprot
 
 import java.time.LocalDate
+import lines._
 
 case class FlatFileEntry(
-  val id: ID,
-  val ac: AC,
-  val dt: DT, // 3 lines
-  val DE_lines        : Seq[Line], // ?
+  val id: lines.ID,
+  val ac: lines.AC,
+  val dt: lines.DT, // 3 lines
+  val de: lines.DE, // ?
   val GN_lines        : Seq[Line], // ?
   val OS_lines        : Seq[Line], //
   val OG_lines        : Seq[Line],
@@ -24,7 +25,7 @@ extends AnyEntry {
 
   lazy val identification: Identification =
     Identification(
-      entryName = id.id,
+      entryName = id.id.mkString,
       status    = id.status,
       length    = id.length
     )
@@ -47,62 +48,12 @@ extends AnyEntry {
       entryLastModified     = dt.entryLastModified
     )
 
-  lazy val description: Description = {
-
-    // if there's a recommended name, the content starts with 'RecName:'; otherwhise there's none
-    // note that there's *always* a DE line, we just don't know what it is
-    // both values here cannot be empty
-    val (recNameLines, rest) = DE_lines.span(_.content.startsWith("RecName:"))
-    val recNameLine = recNameLines.headOption
-
-    val fullNameOpt =
-      recNameLine map { l =>
-
-        val z =
-          l.content
-            .trim
-            .stripPrefix("RecName: Full=")
-            .stripSuffix(";")
-
-        // they sometimes have some funny '{ECO:0000255|HAMAP-Rule:MF_01588}' stuff at the end
-        if(z.endsWith("}"))
-          z.reverse.dropWhile(_ != '{').stripPrefix("{").reverse.trim
-        else
-          z
-      }
-
-    val (shortNames: Seq[String], ecNames: Seq[String]) = recNameLine.fold[(Seq[String], Seq[String])](( Seq(),Seq() ))(l => {
-
-      val restRecNameLinesTrimmed: Seq[String] =
-        rest
-          .map(_.content)
-          .takeWhile(_.startsWith("        "))
-          .map(_.trim)
-
-      (
-        restRecNameLinesTrimmed.filter(_.trim.startsWith("Short="))
-          .map(_.stripPrefix("Short=").stripSuffix(";"))
-        ,
-        restRecNameLinesTrimmed.filter(_.trim.startsWith("EC="))
-          .map(_.stripPrefix("EC=").stripSuffix(";"))
-      )
-    }
-    )
-
-    val ret1 = fullNameOpt.map { fn =>
-      RecommendedName(
-        full  = fn,
-        short = shortNames,
-        ec    = ecNames
-      )
-    }
-
+  lazy val description: Description =
     Description(
-      recommendedName = ret1,
-      alternativeNames = Seq(),
-      submittedNames = Seq()
+      recommendedName   = de.recommendedName,
+      alternativeNames  = de.alternativeNames,
+      submittedNames    = de.submittedNames
     )
-  }
 
   import seqOps._
 
@@ -194,7 +145,7 @@ case object FlatFileEntry {
   import Line._
 
   // super ugly, but I don't see any simpler way
-  def from(allLines: Seq[String]): FlatFileEntry = {
+  def from(allLines: Array[String]): FlatFileEntry = {
 
     val (id_lines, rest0) = allLines.span(isOfType(ID))
     val (ac_lines, rest1) = rest0.span(isOfType(AC))
@@ -215,10 +166,10 @@ case object FlatFileEntry {
     val seqLines = rest14
 
     FlatFileEntry(
-      id  = ID( contentOf(id_lines.head) ),
-      ac  = AC( ac_lines.map(contentOf(_)) ),
-      dt  = DT( dt_lines.map(contentOf(_)) ),
-      DE_lines = de_lines.map(l => Line( DE, contentOf(l) )),
+      id  = lines.ID( contentOf(id_lines.head).toCharArray ),
+      ac  = lines.AC( ac_lines.map(contentOf(_)) ),
+      dt  = lines.DT( dt_lines.map(contentOf(_)) ),
+      de  = lines.DE( de_lines.map(contentOf(_)) ),
       GN_lines = gn_lines.map(l => Line( GN, contentOf(l) )),
       OS_lines = os_lines.map(l => Line( OS, contentOf(l) )),
       OG_lines = og_lines.map(l => Line( OG, contentOf(l) )),

@@ -10,71 +10,6 @@ import seqOps._
 
   All parsing happens here in each of these classes, so that they are easily testable independently.
 */
-case class ID(val value: String) extends AnyVal {
-
-  def id: String =
-    value takeWhile { _ != ' ' }
-
-  def status: Status = {
-
-    val statusStr =
-      value
-        .drop(24) // magic number!
-        .takeWhile(_ != ';')
-
-    if(statusStr == Reviewed.asString) Reviewed else Unreviewed
-  }
-
-  def length: Int =
-    value
-      .trim
-      .stripSuffix(" AA.")
-      .reverse
-      .takeWhile(_ != ' ')
-      .reverse
-      .toInt
-}
-
-case class AC(val lines: Seq[String]) extends AnyVal {
-
-  private def joinedLines: String =
-    lines.mkString("")
-
-  def accesions: Seq[String] =
-    joinedLines
-      .splitSegments(_ == ';')
-      .map(_.trim)
-}
-
-case class DT(val value: Seq[String]) {
-
-  private lazy val dates: Seq[LocalDate] =
-    value
-      .map( l => parsers.localDateFrom( l takeWhile { _ != ',' } ) )
-
-  private lazy val versions: Seq[Int] =
-    value
-      .drop(1)
-      .map(line =>
-        line
-          .reverse
-          .drop(1)
-          .takeWhile(_ != ' ')
-          .reverse
-          .toInt
-      )
-
-  def creation: LocalDate =
-    dates(0)
-
-  def sequenceLastModified: VersionedDate =
-    VersionedDate(dates(1), versions(0))
-
-  def entryLastModified: VersionedDate =
-    VersionedDate(dates(2), versions(1))
-}
-
-case class DE(val value: Seq[String])
 case class GN(val value: Seq[String])
 case class OS(val value: Seq[String])
 case class OG(val value: Seq[String])
@@ -208,42 +143,4 @@ case object Line {
       if(lines.isEmpty) None else Some(Line(lines.head.lineType, newContent))
     }
   }
-}
-
-case object parsers {
-
-  def entries(lines: Iterator[String]) = new Iterator[Seq[String]] {
-
-    private val rest: BufferedIterator[String] = lines.buffered
-
-    def hasNext: Boolean =
-      rest.hasNext
-
-    def next(): Seq[String] =
-      entry
-
-    @annotation.tailrec
-    private def entry_rec(acc: Array[String]): Array[String] =
-      if (rest.hasNext) {
-        if( rest.head.startsWith("//") ) {
-
-          val drop = rest.next()
-          acc
-        }
-        else entry_rec(acc :+ rest.next())
-      }
-      else acc
-
-    private def entry: Seq[String] = entry_rec(Array())
-  }
-
-  // see http://stackoverflow.com/a/33521793/614394
-  lazy val localDateFormatter =
-    new java.time.format.DateTimeFormatterBuilder()
-      .parseCaseInsensitive()
-      .appendPattern("dd-MMM-yyyy")
-      .toFormatter(java.util.Locale.ENGLISH)
-
-  def localDateFrom(rep: String): LocalDate =
-    LocalDate.parse(rep, localDateFormatter)
 }

@@ -53,11 +53,32 @@ class FlatFileEntryTests extends FunSuite {
       .foreach { e => () }
   }
 
-  ignore("split whole SwissProt into entry lines") {
+  test("split whole SwissProt into entry lines") {
 
     parsers.entries(
       io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
     )
+    .foreach { e => () }
+  }
+
+  ignore("split whole SwissProt into entry lines, while loop") {
+
+    val it = parsers.entries(
+      io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
+    )
+
+    while(it.hasNext) {
+
+      it.next
+    }
+  }
+
+  test("parse whole SwissProt") {
+
+    parsers.entries(
+      io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
+    )
+    .map(FlatFileEntry.from)
     .foreach { e => () }
   }
 
@@ -70,7 +91,7 @@ class FlatFileEntryTests extends FunSuite {
     .foreach { e =>
 
       val z = e.accessionNumbers.primary
-      // val u = e.date.creation
+      val u = e.date.creation
       val v = e.identification.status
 
       e.description.recommendedName.foreach { n => if(n.full.isEmpty) println("empty full name!!") }
