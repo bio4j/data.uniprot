@@ -20,13 +20,13 @@ import java.time.LocalDate
   DT   15-DEC-2004, entry version 5.
   ```
 */
-case class DT(val value: Array[String]) {
+case class DT(val value: Seq[String]) {
 
-  private lazy val dates: Array[LocalDate] =
+  private lazy val dates: Seq[LocalDate] =
     value
       .map( l => parsers.localDateFrom( l takeWhile { _ != ',' } ) )
 
-  private lazy val versions: Array[Int] =
+  private lazy val versions: Seq[Int] =
     value
       .drop(1)
       .map(line =>

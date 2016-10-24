@@ -11,7 +11,7 @@ import bio4j.data.uniprot.seqOps._
   Q99605;
   ```
 */
-case class AC(val lines: Array[String]) extends AnyVal {
+case class AC(val lines: Seq[String]) extends AnyVal {
 
   private def joinedLines: String =
     lines.mkString("")

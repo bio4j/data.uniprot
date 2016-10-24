@@ -32,7 +32,7 @@ import bio4j.data.uniprot._, seqOps._
   ```
 */
 
-case class DE(val value: Array[String]) extends AnyVal {
+case class DE(val value: Seq[String]) extends AnyVal {
 
   def recommendedName: Option[RecommendedName] = {
 
@@ -47,7 +47,7 @@ case class DE(val value: Array[String]) extends AnyVal {
     )
   }
 
-  def alternativeNames: Array[AlternativeName] = {
+  def alternativeNames: Seq[AlternativeName] = {
 
     val rl = alternativeNamesLines
 
@@ -61,7 +61,7 @@ case class DE(val value: Array[String]) extends AnyVal {
     }
   }
 
-  def submittedNames: Array[SubmittedName] = {
+  def submittedNames: Seq[SubmittedName] = {
 
     val snl = submittedNamesLines
 
@@ -72,14 +72,14 @@ case class DE(val value: Array[String]) extends AnyVal {
       )
     )
 
-    op.toArray
+    op.toSeq//.toArray
   }
 
-  def alternativeNamesLines: Array[Array[String]] =
-    alternativeNamesLines_rec(Array[Array[String]](), value)
+  def alternativeNamesLines: Seq[Seq[String]] =
+    alternativeNamesLines_rec(Seq[Seq[String]](), value)
 
   @annotation.tailrec
-  private def alternativeNamesLines_rec(acc: Array[Array[String]], ls: Array[String]): Array[Array[String]] = {
+  private def alternativeNamesLines_rec(acc: Seq[Seq[String]], ls: Seq[String]): Seq[Seq[String]] = {
 
     // find first alt name
     val (useless, rest) = ls.span(l => !(l startsWith DE.alternativeNamePrefix))
@@ -97,7 +97,7 @@ case class DE(val value: Array[String]) extends AnyVal {
     }
   }
 
-  private def submittedNamesLines: Array[String] = {
+  private def submittedNamesLines: Seq[String] = {
 
     val (submittedNames, rest) =
       value.span(_.startsWith(DE.submittedNamePrefix))
@@ -106,13 +106,13 @@ case class DE(val value: Array[String]) extends AnyVal {
       submittedNames.map(_.stripPrefix(DE.submittedNamePrefix).trim) ++
         rest.takeWhile(_.startsWith(DE.emptyPrefix)).map(_.trim)
     else
-      Array()
+      Seq()
   }
 
   /*
     this method returns the values, already trimmed:
   */
-  private def recommendedNameLines: Array[String] = {
+  private def recommendedNameLines: Seq[String] = {
 
     // if there's a recommended line, is the first one
     val (recNameLine, rest) =
@@ -122,7 +122,7 @@ case class DE(val value: Array[String]) extends AnyVal {
       recNameLine.map(_.stripPrefix(DE.recommendedNamePrefix).trim) ++
         rest.takeWhile(_.startsWith(DE.emptyPrefix)).map(_.trim)
     else
-      Array()
+      Seq()
   }
 
   private def nameValue(str: String): String =

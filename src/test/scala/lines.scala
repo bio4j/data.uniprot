@@ -34,14 +34,14 @@ class Lines extends FunSuite {
   test("AC") {
 
     val lines1 = lines.AC(
-      Array(
+      Seq(
         "Q16653; O00713; O00714; O00715; Q13054; Q13055; Q14855; Q92891;",
         "Q92892; Q92893; Q92894; Q92895; Q93053; Q96KU9; Q96KV0; Q96KV1;"
       )
     )
 
     val lines2 = lines.AC(
-      Array("Q99605;")
+      Seq("Q99605;")
     )
 
     assert {
@@ -52,7 +52,7 @@ class Lines extends FunSuite {
   test("DT") {
 
     val lines1 = lines.DT(
-      Array(
+      Seq(
         "01-OCT-1996, integrated into UniProtKB/Swiss-Prot.",
         "01-OCT-1996, sequence version 1.",
         "07-FEB-2006, entry version 49."
@@ -60,7 +60,7 @@ class Lines extends FunSuite {
     )
 
     val lines2 = lines.DT(
-      Array(
+      Seq(
         "01-FEB-1999, integrated into UniProtKB/TrEMBL.",
         "15-OCT-2000, sequence version 2.",
         "15-DEC-2004, entry version 5."
@@ -77,7 +77,7 @@ class Lines extends FunSuite {
   test("DE") {
 
     val lines1 = lines.DE(
-      Array(
+      Seq(
         "RecName: Full=Annexin A5;",
         "         Short=Annexin-5;",
         "AltName: Full=Annexin V;",
@@ -132,11 +132,12 @@ class Lines extends FunSuite {
   test("GN") {
 
     val gn = lines.GN(
-      Array(
+      Seq(
         "Name=Jon99Cii; Synonyms=SER1, SER5, Ser99Da; ORFNames=CG7877;",
         "and",
-        "Name=Jon99Ciii; Synonyms=SER2, SER5, Ser99Db; ORFNames=CG15519;",
-        "OrderedLocusNames=b1237, c1701, z2013, ECs1739;"
+        "Name=Jon99Ciii; Synonyms=SER2, SER5, Ser99Db;",
+        "OrderedLocusNames=b1237, c1701, z2013, ECs1739;",
+        "ORFNames=CG15519;"
       )
     )
 
@@ -144,8 +145,11 @@ class Lines extends FunSuite {
     val secondGeneName  = gn.geneNames(1)
 
     assert {
-      firstGeneName.name      === Some( Name("Jon99Cii", Seq("SER1", "SER5", "Ser99Da")) ) &&
-      firstGeneName.ORFNames  === Seq("CG7877")
+      firstGeneName === GeneName(
+        name              = Some(Name("Jon99Cii", Seq("SER1", "SER5", "Ser99Da"))),
+        orderedLocusNames = Seq(),
+        ORFNames          = Seq("CG7877")
+      )
     }
 
     assert {

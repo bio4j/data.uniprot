@@ -7,6 +7,7 @@ import java.time.LocalDate
 
 class EntryParsingSpeed extends FunSuite {
 
+  // ~10s, raw read speed is ~8s
   ignore("split whole SwissProt into entry lines") {
 
     parsers.entries(
@@ -15,7 +16,8 @@ class EntryParsingSpeed extends FunSuite {
     .foreach { e => () }
   }
 
-  ignore("parse whole SwissProt") {
+  // ~25s, don't know why
+  test("parse whole SwissProt") {
 
     parsers.entries(
       io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines

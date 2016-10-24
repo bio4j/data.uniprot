@@ -9,7 +9,7 @@ import bio4j.data.uniprot._, seqOps._
   GN   Name=Jon99Ciii; Synonyms=SER2, SER5, Ser99Db; ORFNames=CG15519;
   ```
 */
-case class GN(val lines: Array[String]) extends AnyVal {
+case class GN(val lines: Seq[String]) extends AnyVal {
 
   final def geneNames: Seq[GeneName] =
     (geneNameLines map names).map { geneNames =>
@@ -25,16 +25,16 @@ case class GN(val lines: Array[String]) extends AnyVal {
       )
     }
 
-  private def geneNameLines: Array[Array[String]] =
+  private def geneNameLines: Seq[Seq[String]] =
     lines splitSegments { _ startsWith GN.geneSeparatorPrefix }
 
-  private def names(geneNameLs: Array[String]): Array[String] =
+  private def names(geneNameLs: Seq[String]): Seq[String] =
     geneNameLs flatMap { line => line.splitSegments(_==';').map(_.trim) }
 
   // here rest is the rest of names
-  private def nameAndSynonyms(allNames: Array[String]): (Option[Name], Array[String]) =
+  private def nameAndSynonyms(allNames: Seq[String]): (Option[Name], Seq[String]) =
     allNames
-      .headOption.fold[(Option[Name], Array[String])]((None, Array())){ first: String =>
+      .headOption.fold[(Option[Name], Seq[String])]((None, Seq())){ first: String =>
 
         val nameOpt: Option[String] =
           if(first startsWith GN.NamePrefix)
@@ -54,22 +54,21 @@ case class GN(val lines: Array[String]) extends AnyVal {
       }
 
   // returns (ordered locus names, rest)
-  private def orderedLocusNames(restOfNames: Array[String]): (Array[String], Array[String]) =
+  private def orderedLocusNames(restOfNames: Seq[String]): (Seq[String], Seq[String]) =
     restOfNames.headOption.fold((restOfNames,restOfNames)) { first =>
       if(first startsWith GN.OrderedLocusNamesPrefix)
-        (first.stripPrefix(GN.OrderedLocusNamesPrefix).splitSegments(_==',').map(_.trim).toArray[String], restOfNames.tail)
+        (first.stripPrefix(GN.OrderedLocusNamesPrefix).splitSegments(_==',').map(_.trim), restOfNames.tail)
       else
-        (Array(), restOfNames)
+        (Seq(), restOfNames)
     }
 
   // returns orfnames
-  private def ORFNames(restOfNames: Array[String]): Array[String] =
+  private def ORFNames(restOfNames: Seq[String]): Seq[String] =
     restOfNames.headOption.fold(restOfNames) { first =>
       if(first startsWith GN.ORFNamesPrefix)
           first
             .stripPrefix(GN.ORFNamesPrefix)
             .splitSegments(_==',').map(_.trim)
-            .toArray[String]
       else
         restOfNames
     }

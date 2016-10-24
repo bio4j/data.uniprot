@@ -4,8 +4,8 @@ import org.scalatest.FunSuite
 
 case object testData {
 
-  lazy val entryLines =
-    entry.split('\n').dropWhile(_.isEmpty)
+  lazy val entryLines: Vector[String] =
+    entry.split('\n').dropWhile(_.isEmpty).toVector
 
   lazy val entry =
 """

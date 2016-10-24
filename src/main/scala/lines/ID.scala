@@ -11,15 +11,15 @@ import bio4j.data.uniprot._, seqOps._
     ID   Q5JU06_HUMAN            Unreviewed;       268 AA.
   ```
 */
-case class ID(val value: Array[Char]) extends AnyVal {
+case class ID(val value: Seq[Char]) extends AnyVal {
 
   // TODO change it to getting slices
-  def id: Array[Char] =
+  def id: Seq[Char] =
     value takeWhile { _ != ' ' }
 
   def status: Status = {
 
-    val statusStr: Array[Char] =
+    val statusStr: Seq[Char] =
       value
         .drop(24) // magic number!
         .takeWhile(_ != ';')

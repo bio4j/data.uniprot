@@ -8,17 +8,17 @@ case class FlatFileEntry(
   val ac: lines.AC,
   val dt: lines.DT, // 3 lines
   val de: lines.DE, // ?
-  val GN_lines        : Seq[Line], // ?
-  val OS_lines        : Seq[Line], //
-  val OG_lines        : Seq[Line],
-  val OX_lines        : Seq[Line],
-  val OH_lines        : Seq[Line],
-  val CC_lines        : Seq[Line],
-  val DR_lines        : Seq[Line],
-  val PE_lines        : Seq[Line],
-  val KW_lines        : Seq[Line],
-  val FT_lines        : Seq[Line],
-  val SQ_lines        : Seq[Line],
+  val GN_lines        : Seq[String], // ?
+  val OS_lines        : Seq[String], //
+  val OG_lines        : Seq[String],
+  val OX_lines        : Seq[String],
+  val OH_lines        : Seq[String],
+  val CC_lines        : Seq[String],
+  val DR_lines        : Seq[String],
+  val PE_lines        : Seq[String],
+  val KW_lines        : Seq[String],
+  val FT_lines        : Seq[String],
+  val SQ_lines        : Seq[String],
   val sequence_lines  : Seq[String]
 )
 extends AnyEntry {
@@ -87,7 +87,9 @@ case object FlatFileEntry {
   import Line._
 
   // super ugly, but I don't see any simpler way
-  def from(allLines: Array[String]): FlatFileEntry = {
+  def from(lns: Seq[String]): FlatFileEntry = {
+
+    val allLines = lns.toArray
 
     val (id_lines, rest0) = allLines.span(isOfType(ID))
     val (ac_lines, rest1) = rest0.span(isOfType(AC))
@@ -108,21 +110,21 @@ case object FlatFileEntry {
     val seqLines = rest14
 
     FlatFileEntry(
-      id  = lines.ID( contentOf(id_lines.head).toCharArray ),
+      id  = lines.ID( contentOf(id_lines.head) ),
       ac  = lines.AC( ac_lines.map(contentOf(_)) ),
       dt  = lines.DT( dt_lines.map(contentOf(_)) ),
       de  = lines.DE( de_lines.map(contentOf(_)) ),
-      GN_lines = gn_lines.map(l => Line( GN, contentOf(l) )),
-      OS_lines = os_lines.map(l => Line( OS, contentOf(l) )),
-      OG_lines = og_lines.map(l => Line( OG, contentOf(l) )),
-      OX_lines = ox_lines.map(l => Line( OX, contentOf(l) )),
-      OH_lines = oh_lines.map(l => Line( OH, contentOf(l) )),
-      CC_lines = cc_lines.map(l => Line( CC, contentOf(l) )),
-      DR_lines = dr_lines.map(l => Line( DR, contentOf(l) )),
-      PE_lines = pe_lines.map(l => Line( PE, contentOf(l) )),
-      KW_lines = kw_lines.map(l => Line( KW, contentOf(l) )),
-      FT_lines = ft_lines.map(l => Line( FT, contentOf(l) )),
-      SQ_lines = sq_lines.map(l => Line( SQ, contentOf(l) )),
+      GN_lines = gn_lines.map(contentOf(_)),
+      OS_lines = os_lines.map(contentOf(_)),
+      OG_lines = og_lines.map(contentOf(_)),
+      OX_lines = ox_lines.map(contentOf(_)),
+      OH_lines = oh_lines.map(contentOf(_)),
+      CC_lines = cc_lines.map(contentOf(_)),
+      DR_lines = dr_lines.map(contentOf(_)),
+      PE_lines = pe_lines.map(contentOf(_)),
+      KW_lines = kw_lines.map(contentOf(_)),
+      FT_lines = ft_lines.map(contentOf(_)),
+      SQ_lines = sq_lines.map(contentOf(_)),
       sequence_lines = seqLines.map(l => contentOf(l))
     )
   }
