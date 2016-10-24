@@ -129,5 +129,33 @@ class Lines extends FunSuite {
     }
   }
 
-  
+  test("GN") {
+
+    val gn = lines.GN(
+      Array(
+        "Name=Jon99Cii; Synonyms=SER1, SER5, Ser99Da; ORFNames=CG7877;",
+        "and",
+        "Name=Jon99Ciii; Synonyms=SER2, SER5, Ser99Db; ORFNames=CG15519;",
+        "OrderedLocusNames=b1237, c1701, z2013, ECs1739;"
+      )
+    )
+
+    val firstGeneName   = gn.geneNames(0)
+    val secondGeneName  = gn.geneNames(1)
+
+    assert {
+      firstGeneName.name      === Some( Name("Jon99Cii", Seq("SER1", "SER5", "Ser99Da")) ) &&
+      firstGeneName.ORFNames  === Seq("CG7877")
+    }
+
+    assert {
+      secondGeneName === GeneName(
+        name              = Some( Name("Jon99Ciii", Seq("SER2", "SER5", "Ser99Db")) ),
+        orderedLocusNames = Seq("b1237", "c1701", "z2013", "ECs1739"),
+        ORFNames          = Seq("CG15519")
+      )
+    }
+  }
+
+
 }

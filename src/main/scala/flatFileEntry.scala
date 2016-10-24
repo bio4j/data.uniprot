@@ -55,65 +55,7 @@ extends AnyEntry {
       submittedNames    = de.submittedNames
     )
 
-  import seqOps._
-
-  lazy val geneNames: Seq[GeneName] = {
-
-    // we can safely join several lines into one String here for each gene
-    def splitByGene(geneLines: Seq[String]): Seq[String] =
-      (geneLines splitSegments { _ startsWith "and" }).map { _.mkString("") }
-
-    def dropECOcrap(fragment: String): String =
-      if(fragment.endsWith("}"))
-      fragment.reverse.dropWhile(_ == ' ').reverse
-      else
-      fragment
-
-    def splitGeneNameValues(line: String): Seq[String] =
-      (line splitSegments { _ == ';' }).map(s => dropECOcrap(s.trim))
-
-    val isName              : String => Boolean = _.startsWith("Name=")
-    val isSynonyms          : String => Boolean = _.startsWith("Synonyms=")
-    val isOrderedLocusNames : String => Boolean = _.startsWith("OrderedLocusNames=")
-    val isORFNames          : String => Boolean = _.startsWith("ORFNames=")
-
-
-    def name(fragment: String): String =
-      dropECOcrap(fragment.stripPrefix("Name=")).trim
-
-    def synonyms(fragment: String): Seq[String] =
-      if(isSynonyms(fragment))
-        fragment.stripPrefix("Synonyms=").splitSegments(_ == ',').map(s => dropECOcrap(s.trim))
-      else
-        Seq()
-
-    def orderedLocusNames(fragment: String): Seq[String] =
-      ???
-
-    def orfNames(fragment: String): Seq[String] =
-      ???
-
-    splitByGene(GN_lines.map(_.content)) map { geneLine =>
-
-      val values = splitGeneNameValues(geneLine)
-
-      val nf = (values filter isName).headOption
-      val n = nf map name
-
-      val sf = (values filter isSynonyms).mkString("")
-      val s = synonyms(sf)
-
-      // TODO finish this
-      val oln   = values filter isOrderedLocusNames
-      val orfn  = values filter isORFNames
-
-      GeneName(
-        name  = n map { Name(_, s) },
-        orderedLocusNames = oln,
-        ORFNames          = orfn
-       )
-    }
-  }
+  lazy val geneNames: Seq[GeneName] = ???
 
   lazy val organismSpecies: OrganismSpecies = ???
 
