@@ -1,31 +1,42 @@
 package bio4j.data.uniprot
 
 import java.time.LocalDate
-import lines._
 
 case class FlatFileEntry(
   val id: lines.ID,
   val ac: lines.AC,
-  val dt: lines.DT, // 3 lines
-  val de: lines.DE, // ?
-  val GN_lines        : Seq[String], // ?
-  val OS_lines        : Seq[String], //
-  val OG_lines        : Seq[String],
-  val OX_lines        : Seq[String],
-  val OH_lines        : Seq[String],
-  val CC_lines        : Seq[String],
-  val DR_lines        : Seq[String],
-  val PE_lines        : Seq[String],
-  val KW_lines        : Seq[String],
-  val FT_lines        : Seq[String],
-  val SQ_lines        : Seq[String],
-  val sequence_lines  : Seq[String]
+  val dt: lines.DT,
+  val de: lines.DE,
+  val gn: lines.GN,
+  val os: lines.OS,
+  val og: lines.OG,
+  val ox: lines.OX,
+  val oh: lines.OH,
+  val cc: lines.CC,
+  val dr: lines.DR,
+  val pe: lines.PE,
+  val kw: lines.KW,
+  val ft: lines.FT,
+  val sq: lines.SQ,
+  val seq: Seq[String]
 )
 extends AnyEntry {
 
+  lazy val allLines: Array[String] =
+    ???
+
+  private def linesOfType(lt: LineType) =
+    (allLines filter Line.isOfType(lt)).map(Line.contentOf)
+
+  lazy val _id: lines.ID =
+    lines.ID(linesOfType(ID).head)
+
+  lazy val _ac: lines.AC =
+    lines.AC(linesOfType(AC))
+
   lazy val identification: Identification =
     Identification(
-      entryName = id.id.mkString,
+      entryName = id.id,
       status    = id.status,
       length    = id.length
     )
@@ -55,7 +66,8 @@ extends AnyEntry {
       submittedNames    = de.submittedNames
     )
 
-  lazy val geneNames: Seq[GeneName] = ???
+  lazy val geneNames: Seq[GeneName] =
+    gn.geneNames
 
   lazy val organismSpecies: OrganismSpecies = ???
 
@@ -84,10 +96,10 @@ extends AnyEntry {
 
 case object FlatFileEntry {
 
-  import Line._
-
   // super ugly, but I don't see any simpler way
   def from(lns: Seq[String]): FlatFileEntry = {
+
+    import Line.{ contentOf, isOfType, isReferenceLine }
 
     val allLines = lns.toArray
 
@@ -110,22 +122,22 @@ case object FlatFileEntry {
     val seqLines = rest14
 
     FlatFileEntry(
-      id  = lines.ID( contentOf(id_lines.head) ),
-      ac  = lines.AC( ac_lines.map(contentOf(_)) ),
-      dt  = lines.DT( dt_lines.map(contentOf(_)) ),
-      de  = lines.DE( de_lines.map(contentOf(_)) ),
-      GN_lines = gn_lines.map(contentOf(_)),
-      OS_lines = os_lines.map(contentOf(_)),
-      OG_lines = og_lines.map(contentOf(_)),
-      OX_lines = ox_lines.map(contentOf(_)),
-      OH_lines = oh_lines.map(contentOf(_)),
-      CC_lines = cc_lines.map(contentOf(_)),
-      DR_lines = dr_lines.map(contentOf(_)),
-      PE_lines = pe_lines.map(contentOf(_)),
-      KW_lines = kw_lines.map(contentOf(_)),
-      FT_lines = ft_lines.map(contentOf(_)),
-      SQ_lines = sq_lines.map(contentOf(_)),
-      sequence_lines = seqLines.map(l => contentOf(l))
+      id = lines.ID( contentOf(id_lines.head) ),
+      ac = lines.AC( ac_lines.map(contentOf(_)) ),
+      dt = lines.DT( dt_lines.map(contentOf(_)) ),
+      de = lines.DE( de_lines.map(contentOf(_)) ),
+      gn = lines.GN( gn_lines.map(contentOf(_)) ),
+      os = lines.OS( os_lines.map(contentOf(_)) ),
+      og = lines.OG( og_lines.map(contentOf(_)) ),
+      ox = lines.OX( ox_lines.map(contentOf(_)) ),
+      oh = lines.OH( oh_lines.map(contentOf(_)) ),
+      cc = lines.CC( cc_lines.map(contentOf(_)) ),
+      dr = lines.DR( dr_lines.map(contentOf(_)) ),
+      pe = lines.PE( pe_lines.map(contentOf(_)) ),
+      kw = lines.KW( kw_lines.map(contentOf(_)) ),
+      ft = lines.FT( ft_lines.map(contentOf(_)) ),
+      sq = lines.SQ( sq_lines.map(contentOf(_)) ),
+      seq = seqLines.map(l => contentOf(l))
     )
   }
 }

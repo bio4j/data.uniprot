@@ -8,24 +8,24 @@ class Lines extends FunSuite {
 
   test("ID") {
 
-    val line1 = lines.ID("CYC_BOVIN               Reviewed;         104 AA.".toCharArray)
-    val line2 = lines.ID("GIA2_GIALA              Reviewed;         296 AA.".toCharArray)
-    val line3 = lines.ID("Q5JU06_HUMAN            Unreviewed;       268 AA.".toCharArray)
+    val line1 = lines.ID("CYC_BOVIN               Reviewed;         104 AA.")
+    val line2 = lines.ID("GIA2_GIALA              Reviewed;         296 AA.")
+    val line3 = lines.ID("Q5JU06_HUMAN            Unreviewed;       268 AA.")
 
     assert {
-      line1.id      === "CYC_BOVIN".toCharArray &&
+      line1.id      === "CYC_BOVIN" &&
       line1.status  === Reviewed    &&
       line1.length  === 104
     }
 
     assert {
-      line2.id      === "GIA2_GIALA".toCharArray  &&
+      line2.id      === "GIA2_GIALA"  &&
       line2.status  === Reviewed      &&
       line2.length  === 296
     }
 
     assert {
-      line3.id      === "Q5JU06_HUMAN".toCharArray  &&
+      line3.id      === "Q5JU06_HUMAN"  &&
       line3.status  === Unreviewed      &&
       line3.length  === 268
     }

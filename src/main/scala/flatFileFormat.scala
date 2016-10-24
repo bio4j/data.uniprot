@@ -3,35 +3,6 @@ package bio4j.data.uniprot
 import java.time.LocalDate
 import seqOps._
 
-/*
-  ## Line classes
-
-  These classes correspond to each line type, with their value being the corresponding lines in an entry, stripped of their prefix and space.
-
-  All parsing happens here in each of these classes, so that they are easily testable independently.
-*/
-case class GN(val value: Seq[String])
-case class OS(val value: Seq[String])
-case class OG(val value: Seq[String])
-case class OX(val value: Seq[String])
-case class RN(val value: Seq[String])
-case class RP(val value: Seq[String])
-case class RC(val value: Seq[String])
-case class RX(val value: Seq[String])
-case class RG(val value: Seq[String])
-case class RA(val value: Seq[String])
-case class RT(val value: Seq[String])
-case class RL(val value: Seq[String])
-case class OH(val value: Seq[String])
-case class CC(val value: Seq[String])
-case class DR(val value: Seq[String])
-case class PE(val value: Seq[String])
-case class KW(val value: Seq[String])
-case class FT(val value: Seq[String])
-case class SQ(val value: Seq[String])
-
-
-
 sealed trait LineType { lazy val asString: String = toString }
   case object ID extends LineType
   case object AC extends LineType
