@@ -1,8 +1,6 @@
 package bio4j.data.uniprot.test
 
 import org.scalatest.FunSuite
-
-import collection.JavaConverters._
 import bio4j.data.uniprot._
 import java.time.LocalDate
 
@@ -129,6 +127,7 @@ class Lines extends FunSuite {
         )
       )
     }
-
   }
+
+  
 }
