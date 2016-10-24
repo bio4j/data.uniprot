@@ -7,7 +7,6 @@ package bio4j.data.uniprot
 
 import java.time.LocalDate
 
-// NOTE not sure about all these `Any`s being of any use
 trait AnyEntry extends Any {
 
   def identification          : Identification
