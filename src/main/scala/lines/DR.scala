@@ -3,12 +3,7 @@ package bio4j.data.uniprot.lines
 import bio4j.data.uniprot.{ DatabaseCrossReference, ResourceAbbreviation }
 import bio4j.data.uniprot.seqOps._
 /*
-case class DatabaseCrossReference(
-  val resource          : ResourceAbbreviation,
-  val identifier        : String,
-  val otherInformation  : Option[String],
-  val isoformID         : Option[String]
-)
+  Example:
 
   ```
   EMBL; U29082; AAA68403.1; -; Genomic_DNA.
