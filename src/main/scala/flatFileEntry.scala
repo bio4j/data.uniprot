@@ -96,11 +96,15 @@ extends AnyEntry {
 
   private lazy val pe: lines.PE =
     lines.PE(linesOfType(PE).head)
-    
+
   lazy val proteinExistence: ProteinExistence =
     pe.proteinExistence
 
-  lazy val keywords: Seq[Keyword] = ???
+  private lazy val kw: lines.KW =
+    lines.KW(linesOfType(KW))
+
+  lazy val keywords: Seq[Keyword] =
+    kw.keywords
 
   lazy val features: Seq[Feature] = ???
 

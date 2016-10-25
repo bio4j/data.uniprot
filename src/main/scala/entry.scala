@@ -328,8 +328,7 @@ sealed trait ProteinExistence
 
 /* http://web.expasy.org/docs/userman.html#KW_line */
 case class Keyword(
-  val id          : String,
-  val description : String
+  val id: String
 )
 
 /* http://web.expasy.org/docs/userman.html#FT_line */
