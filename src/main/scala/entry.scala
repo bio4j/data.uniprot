@@ -315,7 +315,28 @@ case object ResourceAbbreviation {
 
   // TODO super ugly match
   def fromString(rep: String): ResourceAbbreviation =
-    ???
+    rep match {
+      case EMBL.asString  => EMBL
+      case Allergome.asString => Allergome
+      case ArachnoServer.asString => ArachnoServer
+      case Bgee.asString => Bgee
+      case BindingDB.asString => BindingDB
+      case BioCyc.asString => BioCyc
+      case BioGrid.asString => BioGrid
+      case BioMuta.asString => BioMuta
+      case BRENDA.asString => BRENDA
+      case CAZy.asString => CAZy
+      case CCDS.asString => CCDS
+      case CDD.asString => CDD
+      case ChEMBL.asString => ChEMBL
+      case ChiTaRS.asString => ChiTaRS
+      case CGD.asString => CGD
+      case CleanEx.asString => CleanEx
+      case `COMPLUYEAST-2DPAGE`.asString => `COMPLUYEAST-2DPAGE`
+      case CollecTF.asString => CollecTF
+      case _ => ???
+      // TODO add the others
+    }
 }
 
 /* http://web.expasy.org/docs/userman.html#PE_line */

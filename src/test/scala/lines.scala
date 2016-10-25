@@ -256,4 +256,30 @@ class Lines extends FunSuite {
       )
     }
   }
+
+  test("DR") {
+
+    val dr1 = lines.DR(
+      Vector(
+        "EMBL; U29082; AAA68403.1; -; Genomic_DNA.",
+        "Allergome; 3541; Asc s 1.0101.",
+        "ArachnoServer; AS000173; kappa-hexatoxin-Hv1b.",
+        "Bgee; ENSMUSG00000032315; -.",
+        "BindingDB; P06709; -.",
+        "BioCyc; EcoCyc:USHA-MONOMER; -.",
+        "BioGrid; 69392; 1."
+        // "BioMuta; TF; -.",
+        // "BRENDA; 3.5.99.5; 3804.",
+        // "CAZy; GH109; Glycoside Hydrolase Family 109.",
+        // "CCDS; CCDS18166.1; -. [O89019-1]",
+        // "CDD; cd01948; EAL; 1."
+      )
+    )
+
+    assert {
+      dr1.databaseCrossReferences.map{ _.identifier } === Vector(
+        "U29082", "3541", "AS000173", "ENSMUSG00000032315", "P06709", "EcoCyc:USHA-MONOMER", "69392"
+      )
+    }
+  }
 }
