@@ -62,7 +62,11 @@ extends AnyEntry {
 
   lazy val organismSpecies: OrganismSpecies = ???
 
-  lazy val organelle: Option[Organelle] = ???
+  private lazy val og: lines.OG =
+    lines.OG(linesOfType(GN))
+
+  lazy val organelles: Seq[Organelle] =
+    og.organelles
 
   lazy val organismClassification: OrganismClassification = ???
 

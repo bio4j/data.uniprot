@@ -15,7 +15,7 @@ trait AnyEntry extends Any {
   def description             : Description
   def geneNames               : Seq[GeneName]
   def organismSpecies         : OrganismSpecies
-  def organelle               : Option[Organelle]
+  def organelles              : Seq[Organelle]
   def organismClassification  : OrganismClassification
   def taxonomyCrossReference  : TaxonomyCrossReference
   def organismHost            : Seq[TaxonomyCrossReference]

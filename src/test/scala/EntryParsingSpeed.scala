@@ -27,7 +27,7 @@ class EntryParsingSpeed extends FunSuite {
   }
 
   // ~26s
-  test("parse whole SwissProt, access some data") {
+  ignore("parse whole SwissProt, access some data") {
 
     parsers.entries(
       io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines

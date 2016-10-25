@@ -161,5 +161,39 @@ class Lines extends FunSuite {
     }
   }
 
+  test("OG") {
 
+    // TODO
+    // OG   Hydrogenosome.
+    // OG   Mitochondrion.
+    // OG   Nucleomorph.
+    // OG   Plasmid name.
+    // OG   Plastid.
+    // OG   Plastid; Apicoplast.
+    // OG   Plastid; Chloroplast.
+    // OG   Plastid; Organellar chromatophore.
+    // OG   Plastid; Cyanelle.
+    // OG   Plastid; Non-photosynthetic plastid.
+    // OG   Plasmid R6-5, Plasmid IncFII R100 (NR1), and
+    // OG   Plasmid IncFII R1-19 (R1 drd-19).
+
+    val og1 = lines.OG(Seq("Hydrogenosome."))
+    val og2 = lines.OG(Seq("Mitochondrion."))
+    val og4 = lines.OG(
+      Seq(
+        "Plasmid R6-5, Plasmid IncFII R100 (NR1), and",
+        "Plasmid IncFII R1-19 (R1 drd-19)."
+      )
+    )
+
+    assert {
+      og1.organelles === Seq(Hydrogenosome)   &&
+      og2.organelles === Seq(Mitochondrion)   &&
+      og4.organelles === Seq(
+        Plasmid("R6-5"),
+        Plasmid("IncFII R100 (NR1)"),
+        Plasmid("IncFII R1-19 (R1 drd-19)")
+      )
+    }
+  }
 }
