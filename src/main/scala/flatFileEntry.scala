@@ -68,7 +68,6 @@ extends AnyEntry {
   lazy val organelles: Seq[Organelle] =
     og.organelles
 
-
   lazy val organismClassification: OrganismClassification = ???
 
   private lazy val ox: lines.OX =
@@ -83,11 +82,23 @@ extends AnyEntry {
   lazy val organismHost: Seq[TaxonomyCrossReference] =
     oh.taxonomyCrossReferences
 
-  lazy val comments: Seq[Comment] = ???
+  private lazy val cc: lines.CC =
+    lines.CC(linesOfType(CC))
 
-  lazy val databaseCrossReferences: Seq[DatabaseCrossReference] = ???
+  lazy val comments: Seq[Comment] =
+    cc.comments
 
-  lazy val proteinExistence: ProteinExistence = ???
+  private lazy val dr: lines.DR =
+    lines.DR(linesOfType(DR))
+
+  lazy val databaseCrossReferences: Seq[DatabaseCrossReference] =
+    dr.databaseCrossReferences
+
+  private lazy val pe: lines.PE =
+    lines.PE(linesOfType(PE).head)
+    
+  lazy val proteinExistence: ProteinExistence =
+    pe.proteinExistence
 
   lazy val keywords: Seq[Keyword] = ???
 
