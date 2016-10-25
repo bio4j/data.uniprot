@@ -311,6 +311,11 @@ sealed trait ResourceAbbreviation {
   case object Xenbase               extends ResourceAbbreviation { val description: String = "Xenopus laevis and tropicalis biology and genome database" }
   case object ZFIN                  extends ResourceAbbreviation { val description: String = "Zebrafish Information Network genome database (ZFIN)" }
 
+case object ResourceAbbreviation {
+
+  def fromString(rep: String): ResourceAbbreviation =
+    ???
+}
 
 /* http://web.expasy.org/docs/userman.html#PE_line */
 sealed trait ProteinExistence
