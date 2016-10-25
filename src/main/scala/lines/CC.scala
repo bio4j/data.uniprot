@@ -2,27 +2,26 @@ package bio4j.data.uniprot.lines
 
 import bio4j.data.uniprot._
 
-case class CC(val lines: Seq[String]) extends AnyVal {
+case class CC(val lines: Seq[String])  {
 
   def comments: Seq[Comment] =
-    commentBlocks flatMap commentFromBlock
+    commentBlocks(lines) flatMap commentFromBlock
 
-  private def commentFromBlock(lines: Seq[String]): Seq[Comment] = {
+  private def commentFromBlock(blockLines: Seq[String]): Seq[Comment] = {
 
-    val (topic, _headContent) = lines.head.span(_!=':')
+    val (topic, _headContent) = blockLines.head.span(_!=':')
 
-    val contents: Seq[String] = _headContent.stripPrefix(":") +: lines.tail
+    val contents: Seq[String] = _headContent.stripPrefix(":").trim +: blockLines.tail
 
     topic match {
 
-      case "ALLERGEN"                       => Seq( Allergen(contents.mkString(" ")) )
-      case "ALTERNATIVE PRODUCTS"           => Seq( ??? )
-      case "BIOPHYSICOCHEMICAL PROPERTIES"  => Seq( BiophysicochemicalProperties(contents.mkString(" ")) )
-      case "BIOTECHNOLOGY"                  => Seq( Biotechnology(contents.mkString(" ")) )
-      case "CATALYTIC ACTIVITY"             => Seq( CatalyticActivity(comments.mkString(" ")) )
+      case "ALLERGEN"                       => Vector( Allergen(contents.mkString(" ")) )
+      case "ALTERNATIVE PRODUCTS"           => Vector( ??? )
+      case "BIOPHYSICOCHEMICAL PROPERTIES"  => Vector( BiophysicochemicalProperties(contents.mkString(" ")) )
+      case "BIOTECHNOLOGY"                  => Vector( Biotechnology(contents.mkString(" ")) )
+      case "CATALYTIC ACTIVITY"             => Vector( CatalyticActivity(contents.mkString(" ")) )
       case "CAUTION"                        => Seq( Caution(contents.mkString(" ")) )
       case "COFACTOR"                       => Seq( Cofactor(contents.mkString(" ")) )
-      case "WEB RESOURCE"                   => Seq( WebResource(contents.mkString(" ")) )
       case "DEVELOPMENTAL STAGE"            => Seq( DevelopmentalStage(contents.mkString(" ")) )
       case "DISEASE"                        => Seq( Disease(contents.mkString(" ")) )
       case "DISRUPTION PHENOTYPE"           => Seq( DisruptionPhenotype(contents.mkString(" ")) )
@@ -45,29 +44,17 @@ case class CC(val lines: Seq[String]) extends AnyVal {
       case "TISSUE SPECIFICITY"             => Seq( TissueSpecificity(contents.mkString(" ")) )
       case "TOXIC DOSE"                     => Seq( ToxicDose(contents.mkString(" ")) )
       case "WEB RESOURCE"                   => Seq( WebResource(contents.mkString(" ")) )
-      case _ => ???
     }
   }
 
-  private def commentBlocks: Seq[Seq[String]] =
-    commentBlocks_rec(lines, Seq())
-
-  @annotation.tailrec
-  private def commentBlocks_rec(commentLines: Seq[String], acc: Seq[Seq[String]]): Seq[Seq[String]] = {
-
-    val (thisCommentDefLines, rest) = commentLines span { line =>  line startsWith "-!- " }
-
-    val (thisCommentOtherLines, restOfComments) = rest span { _ startsWith "    " }
-
-    val nextAcc: Seq[Seq[String]] =
-      acc :+ (thisCommentDefLines.head.stripPrefix("-!-").trim +: thisCommentOtherLines.map(_.trim))
-
-    if(restOfComments.isEmpty)
-      nextAcc
-    else
-      commentBlocks_rec(
-        commentLines = restOfComments,
-        acc = nextAcc
-      )
-  }
+  private def commentBlocks(commentLines: Seq[String]): Seq[Seq[String]] =
+    commentLines.foldLeft[Seq[Seq[String]]](Vector()){ (acc: Seq[Seq[String]], line: String) =>
+      // extra lines for a comment
+      if(line startsWith "    ") {
+        acc.updated(acc.length -1, acc.last :+ line.trim)
+      }
+      else {
+        acc :+ Vector(line.stripPrefix("-!-").trim)
+      }
+    }
 }

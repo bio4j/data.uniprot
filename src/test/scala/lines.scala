@@ -209,7 +209,7 @@ class Lines extends FunSuite {
   test("OH") {
 
     val oh1 = lines.OH(
-      Seq(
+      Vector(
         "NCBI_TaxID=9481; Callithrix.",
         "NCBI_TaxID=9536; Cercopithecus hamlyni (Owl-faced monkey) (Hamlyn's monkey).",
         "NCBI_TaxID=9539; Macaca (macaques).",
@@ -226,6 +226,34 @@ class Lines extends FunSuite {
         TaxonomyCrossReference("9598")
       )
     }
+  }
 
+  test("CC") {
+
+    val cc1 = lines.CC(
+      Vector(
+        "-!- ALLERGEN: Causes an allergic reaction in human. Minor allergen of",
+        "    bovine dander.",
+        "-!- DISRUPTION PHENOTYPE: Mice display impaired B-cell development",
+        "    which does not progress pass the progenitor stage.",
+        "-!- CATALYTIC ACTIVITY: ATP + L-glutamate + NH(3) = ADP + phosphate +",
+        "    L-glutamine.",
+        "-!- CAUTION: It is uncertain whether Met-1 or Met-3 is the initiator.",
+        "-!- COFACTOR: Pyridoxal phosphate.",
+        "-!- COFACTOR: FAD. {ECO:0000255|HAMAP-Rule:MF_01202}."
+
+      )
+    )
+
+    assert {
+      cc1.comments === Vector(
+        Allergen("Causes an allergic reaction in human. Minor allergen of bovine dander."),
+        DisruptionPhenotype("Mice display impaired B-cell development which does not progress pass the progenitor stage."),
+        CatalyticActivity("ATP + L-glutamate + NH(3) = ADP + phosphate + L-glutamine."),
+        Caution("It is uncertain whether Met-1 or Met-3 is the initiator."),
+        Cofactor("Pyridoxal phosphate."),
+        Cofactor("FAD. {ECO:0000255|HAMAP-Rule:MF_01202}.")
+      )
+    }
   }
 }
