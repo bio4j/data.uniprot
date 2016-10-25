@@ -196,4 +196,8 @@ class Lines extends FunSuite {
       )
     }
   }
+
+  test("OX") {}
+
+  test("OH") {}
 }

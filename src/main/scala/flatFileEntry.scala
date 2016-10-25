@@ -68,11 +68,20 @@ extends AnyEntry {
   lazy val organelles: Seq[Organelle] =
     og.organelles
 
+
   lazy val organismClassification: OrganismClassification = ???
 
-  lazy val taxonomyCrossReference: TaxonomyCrossReference = ???
+  private lazy val ox: lines.OX =
+    lines.OX(linesOfType(OX).head)
 
-  lazy val organismHost: Seq[TaxonomyCrossReference] = ???
+  lazy val taxonomyCrossReference: TaxonomyCrossReference =
+    ox.taxonomyCrossReference
+
+  private lazy val oh: lines.OH =
+    lines.OH(linesOfType(OH))
+
+  lazy val organismHost: Seq[TaxonomyCrossReference] =
+    oh.taxonomyCrossReferences
 
   lazy val comments: Seq[Comment] = ???
 
