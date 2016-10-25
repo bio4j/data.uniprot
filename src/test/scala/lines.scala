@@ -282,4 +282,21 @@ class Lines extends FunSuite {
       )
     }
   }
+
+  test("PE") {
+
+    val pe1 = lines.PE("1: Evidence at protein level")
+    val pe2 = lines.PE("2: Evidence at transcript level")
+    val pe3 = lines.PE("3: Inferred from homology")
+    val pe4 = lines.PE("4: Predicted")
+    val pe5 = lines.PE("5: Uncertain")
+
+    assert {
+      pe1.proteinExistence === EvidenceAtProteinLevel     &&
+      pe2.proteinExistence === EvidenceAtTranscriptLevel  &&
+      pe3.proteinExistence === InferredFromHomology       &&
+      pe4.proteinExistence === Predicted                  &&
+      pe5.proteinExistence === Uncertain
+    }    
+  }
 }
