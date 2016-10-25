@@ -297,6 +297,29 @@ class Lines extends FunSuite {
       pe3.proteinExistence === InferredFromHomology       &&
       pe4.proteinExistence === Predicted                  &&
       pe5.proteinExistence === Uncertain
-    }    
+    }
+  }
+
+  test("KW") {
+
+    val kw1 = lines.KW(
+      Vector(
+        "3D-structure; Alternative splicing; Alzheimer disease; Amyloid;",
+        "Apoptosis; Cell adhesion; Coated pits; Copper;"
+      )
+    )
+
+    assert {
+      kw1.keywords === Vector(
+        Keyword("3D-structure"),
+        Keyword("Alternative splicing"),
+        Keyword("Alzheimer disease"),
+        Keyword("Amyloid"),
+        Keyword("Apoptosis"),
+        Keyword("Cell adhesion"),
+        Keyword("Coated pits"),
+        Keyword("Copper")
+      )
+    }
   }
 }
