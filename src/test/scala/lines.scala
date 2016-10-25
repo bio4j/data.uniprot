@@ -197,7 +197,35 @@ class Lines extends FunSuite {
     }
   }
 
-  test("OX") {}
+  test("OX") {
 
-  test("OH") {}
+    val ox1 = lines.OX("NCBI_TaxID=9606;")
+
+    assert {
+      ox1.taxonomyCrossReference === TaxonomyCrossReference("9606")
+    }
+  }
+
+  test("OH") {
+
+    val oh1 = lines.OH(
+      Seq(
+        "NCBI_TaxID=9481; Callithrix.",
+        "NCBI_TaxID=9536; Cercopithecus hamlyni (Owl-faced monkey) (Hamlyn's monkey).",
+        "NCBI_TaxID=9539; Macaca (macaques).",
+        "NCBI_TaxID=9598; Pan troglodytes (Chimpanzee)."
+      )
+    )
+
+    assert {
+
+      oh1.taxonomyCrossReferences === Seq(
+        TaxonomyCrossReference("9481"),
+        TaxonomyCrossReference("9536"),
+        TaxonomyCrossReference("9539"),
+        TaxonomyCrossReference("9598")
+      )
+    }
+
+  }
 }

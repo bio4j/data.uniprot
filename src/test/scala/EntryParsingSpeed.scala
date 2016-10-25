@@ -44,7 +44,7 @@ class EntryParsingSpeed extends FunSuite {
   }
 
   // ~15s
-  test("All SwissProt entries have a full name") {
+  ignore("All SwissProt entries have a full name") {
 
     val noOfEntries = 551987
 
