@@ -34,7 +34,14 @@ import bio4j.data.uniprot._, seqOps._
 
 case class DE(val value: Seq[String]) extends AnyVal {
 
-  def recommendedName: Option[RecommendedName] = {
+  final def description: Description =
+    Description(
+      recommendedName,
+      alternativeNames,
+      submittedNames
+    )
+
+  private def recommendedName: Option[RecommendedName] = {
 
     val rl = recommendedNameLines
 
@@ -47,7 +54,7 @@ case class DE(val value: Seq[String]) extends AnyVal {
     )
   }
 
-  def alternativeNames: Seq[AlternativeName] = {
+  private def alternativeNames: Seq[AlternativeName] = {
 
     val rl = alternativeNamesLines
 
@@ -61,7 +68,7 @@ case class DE(val value: Seq[String]) extends AnyVal {
     }
   }
 
-  def submittedNames: Seq[SubmittedName] = {
+  private def submittedNames: Seq[SubmittedName] = {
 
     val snl = submittedNamesLines
 
@@ -75,7 +82,7 @@ case class DE(val value: Seq[String]) extends AnyVal {
     op.toSeq//.toArray
   }
 
-  def alternativeNamesLines: Seq[Seq[String]] =
+  private def alternativeNamesLines: Seq[Seq[String]] =
     alternativeNamesLines_rec(Seq[Seq[String]](), value)
 
   @annotation.tailrec

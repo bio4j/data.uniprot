@@ -22,6 +22,13 @@ import java.time.LocalDate
 */
 case class DT(val value: Seq[String]) {
 
+  final def date: Date =
+    Date(
+      creation              = this.creation,
+      sequenceLastModified  = this.sequenceLastModified,
+      entryLastModified     = this.entryLastModified
+    )
+
   private lazy val dates: Seq[LocalDate] =
     value
       .map( l => parsers.localDateFrom( l takeWhile { _ != ',' } ) )

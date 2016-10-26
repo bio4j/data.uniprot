@@ -7,19 +7,12 @@ case class FlatFileEntry(
 )
 extends AnyEntry {
 
-  private def linesOfType(lt: LineType) =
-    (allLines filter Line.isOfType(lt)).map(Line.contentOf)
-
   private lazy val id: lines.ID =
     lines.ID(linesOfType(ID).head)
 
   @inline
   final def identification: Identification =
-    Identification(
-      entryName = id.id,
-      status    = id.status,
-      length    = id.length
-    )
+    id.identification
 
   private lazy val ac: lines.AC =
     lines.AC(linesOfType(AC))
@@ -41,29 +34,25 @@ extends AnyEntry {
 
   @inline
   final def date: Date =
-    Date(
-      creation              = dt.creation,
-      sequenceLastModified  = dt.sequenceLastModified,
-      entryLastModified     = dt.entryLastModified
-    )
+    dt.date
 
   private lazy val de: lines.DE =
     lines.DE(linesOfType(DE))
 
-  lazy val description: Description =
-    Description(
-      recommendedName   = de.recommendedName,
-      alternativeNames  = de.alternativeNames,
-      submittedNames    = de.submittedNames
-    )
+  @inline
+  final def description: Description =
+    de.description
 
   private lazy val gn: lines.GN =
     lines.GN(linesOfType(GN))
 
-  lazy val geneNames: Seq[GeneName] =
+  @inline
+  final def geneNames: Seq[GeneName] =
     gn.geneNames
 
-  lazy val organismSpecies: OrganismSpecies = ???
+  @inline
+  final def organismSpecies: OrganismSpecies =
+    ???
 
   private lazy val og: lines.OG =
     lines.OG(linesOfType(GN))
@@ -71,12 +60,15 @@ extends AnyEntry {
   lazy val organelles: Seq[Organelle] =
     og.organelles
 
-  lazy val organismClassification: OrganismClassification = ???
+  @inline
+  final def organismClassification: OrganismClassification =
+    ???
 
   private lazy val ox: lines.OX =
     lines.OX(linesOfType(OX).head)
 
-  lazy val taxonomyCrossReference: TaxonomyCrossReference =
+  @inline
+  final def taxonomyCrossReference: TaxonomyCrossReference =
     ox.taxonomyCrossReference
 
   private lazy val oh: lines.OH =
@@ -96,19 +88,22 @@ extends AnyEntry {
   private lazy val dr: lines.DR =
     lines.DR(linesOfType(DR))
 
-  lazy val databaseCrossReferences: Seq[DatabaseCrossReference] =
+  @inline
+  final def databaseCrossReferences: Seq[DatabaseCrossReference] =
     dr.databaseCrossReferences
 
   private lazy val pe: lines.PE =
     lines.PE(linesOfType(PE).head)
 
-  lazy val proteinExistence: ProteinExistence =
+  @inline
+  final def proteinExistence: ProteinExistence =
     pe.proteinExistence
 
   private lazy val kw: lines.KW =
     lines.KW(linesOfType(KW))
 
-  lazy val keywords: Seq[Keyword] =
+  @inline
+  final def keywords: Seq[Keyword] =
     kw.keywords
 
   private lazy val ft: lines.FT =
@@ -125,7 +120,17 @@ extends AnyEntry {
   final def sequenceHeader: SequenceHeader =
     sq.sequenceHeader
 
-  lazy val sequence: Sequence = ???
+  private lazy val sd: lines.SequenceData =
+    lines.SequenceData(linesOfType(`  `))
+
+  @inline
+  final def sequence: Sequence =
+    sd.sequence
+
+
+
+  private def linesOfType(lt: LineType) =
+    (allLines filter Line.isOfType(lt)).map(Line.contentOf)
 }
 
 case object FlatFileEntry {

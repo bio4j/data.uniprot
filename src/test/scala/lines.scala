@@ -93,38 +93,39 @@ class Lines extends FunSuite {
 
     assert {
 
-      lines1.recommendedName === Some(
-        RecommendedName(
-          full  = "Annexin A5",
-          short = Seq("Annexin-5"),
-          ec    = Seq()
-        )
-      )
-    }
+      lines1.description === Description(
+        recommendedName = Some(
+          RecommendedName(
+            full  = "Annexin A5",
+            short = Seq("Annexin-5"),
+            ec    = Seq()
+          )
+        ),
 
-    assert {
+        alternativeNames = Vector(
+          AlternativeName(
+            full = Some("Annexin V"),
+            short = Seq(),
+            ec    = Seq()
+          ),
+          AlternativeName(
+            full = Some("Placental anticoagulant protein I"),
+            short = Seq("PAP-I"),
+            ec    = Seq()
+          ),
+          AlternativeName(
+            full = Some("Vascular anticoagulant-alpha"),
+            short = Seq("VAC-alpha", "VAC-anti"),
+            ec    = Seq()
+          ),
+          AlternativeName(
+            full = Some("Anchorin CII"),
+            short = Seq(),
+            ec    = Seq("1.43.12.1")
+          )
+        ),
 
-      lines1.alternativeNames === Seq(
-        AlternativeName(
-          full = Some("Annexin V"),
-          short = Seq(),
-          ec    = Seq()
-        ),
-        AlternativeName(
-          full = Some("Placental anticoagulant protein I"),
-          short = Seq("PAP-I"),
-          ec    = Seq()
-        ),
-        AlternativeName(
-          full = Some("Vascular anticoagulant-alpha"),
-          short = Seq("VAC-alpha", "VAC-anti"),
-          ec    = Seq()
-        ),
-        AlternativeName(
-          full = Some("Anchorin CII"),
-          short = Seq(),
-          ec    = Seq("1.43.12.1")
-        )
+        submittedNames = Vector()
       )
     }
   }

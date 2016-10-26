@@ -13,6 +13,13 @@ import bio4j.data.uniprot._, seqOps._
 */
 case class ID(val value: String) extends AnyVal {
 
+  final def identification: Identification =
+    Identification(
+      entryName = this.id,
+      status    = this.status,
+      length    = this.length
+    )
+
   // TODO change it to getting slices
   def id: String =
     value takeWhile { _ != ' ' }
