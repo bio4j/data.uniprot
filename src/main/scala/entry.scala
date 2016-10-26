@@ -1,13 +1,12 @@
 /*
-This set of types serves as a generic model for UniProt entries. The main reference is the **[UniProt Knowledgebase user manual](http://web.expasy.org/docs/userman.html)**.
+  This set of types serves as a generic model for UniProt entries. The main reference is the **[UniProt Knowledgebase user manual](http://web.expasy.org/docs/userman.html)**.
 
-The method names match the "Content" description in the table at the end of the [General Structure section](http://web.expasy.org/docs/userman.html#entrystruc), with plurals signaling a `Seq` return type.
+  The method names match the "Content" description in the table at the end of the [General Structure section](http://web.expasy.org/docs/userman.html#entrystruc), with plurals signaling a `Seq` return type.
 */
 package bio4j.data.uniprot
 
 import java.time.LocalDate
 
-// NOTE not sure about all these `Any`s being of any use
 trait AnyEntry extends Any {
 
   def identification          : Identification
@@ -16,7 +15,7 @@ trait AnyEntry extends Any {
   def description             : Description
   def geneNames               : Seq[GeneName]
   def organismSpecies         : OrganismSpecies
-  def organelle               : Option[Organelle]
+  def organelles              : Seq[Organelle]
   def organismClassification  : OrganismClassification
   def taxonomyCrossReference  : TaxonomyCrossReference
   def organismHost            : Seq[TaxonomyCrossReference]
@@ -61,7 +60,7 @@ case class VersionedDate(
 
 /* http://web.expasy.org/docs/userman.html#DE_line */
 case class Description(
-  val recommendedName   : RecommendedName,
+  val recommendedName   : Option[RecommendedName],
   val alternativeNames  : Seq[AlternativeName],
   val submittedNames    : Seq[SubmittedName]
 )
@@ -312,6 +311,151 @@ sealed trait ResourceAbbreviation {
   case object Xenbase               extends ResourceAbbreviation { val description: String = "Xenopus laevis and tropicalis biology and genome database" }
   case object ZFIN                  extends ResourceAbbreviation { val description: String = "Zebrafish Information Network genome database (ZFIN)" }
 
+case object ResourceAbbreviation {
+
+  def fromString(rep: String): ResourceAbbreviation =
+    rep match {
+      case EMBL.asString  => EMBL
+      case Allergome.asString => Allergome
+      case ArachnoServer.asString => ArachnoServer
+      case Bgee.asString => Bgee
+      case BindingDB.asString => BindingDB
+      case BioCyc.asString => BioCyc
+      case BioGrid.asString => BioGrid
+      case BioMuta.asString => BioMuta
+      case BRENDA.asString => BRENDA
+      case CAZy.asString => CAZy
+      case CCDS.asString => CCDS
+      case CDD.asString => CDD
+      case ChEMBL.asString => ChEMBL
+      case ChiTaRS.asString => ChiTaRS
+      case CGD.asString => CGD
+      case CleanEx.asString => CleanEx
+      case `COMPLUYEAST-2DPAGE`.asString => `COMPLUYEAST-2DPAGE`
+      case CollecTF.asString => CollecTF
+      case ConoServer.asString => ConoServer
+      case CTD.asString => CTD
+      case dictyBase.asString => dictyBase
+      case DIP.asString => DIP
+      case DMDM.asString => DMDM
+      case DNASU.asString => DNASU
+      case `DOSAC-COBS-2DPAGE`.asString => `DOSAC-COBS-2DPAGE`
+      case DisProt.asString => DisProt
+      case DrugBank.asString => DrugBank
+      case EchoBASE.asString => EchoBASE
+      case EcoGene.asString => EcoGene
+      case eggNOG.asString => eggNOG
+      case Ensembl.asString => Ensembl
+      case EnsemblBacteria.asString => EnsemblBacteria
+      case EnsemblFungi.asString => EnsemblFungi
+      case EnsemblMetazoa.asString => EnsemblMetazoa
+      case EnsemblPlants.asString => EnsemblPlants
+      case EnsemblProtists.asString => EnsemblProtists
+      case EPD.asString => EPD
+      case ESTHER.asString => ESTHER
+      case euHCVdb.asString => euHCVdb
+      case EuPathDB.asString => EuPathDB
+      case EvolutionaryTrace.asString => EvolutionaryTrace
+      case ExpressionAtlas.asString => ExpressionAtlas
+      case FlyBase.asString => FlyBase
+      case Gene3D.asString => Gene3D
+      case GeneCards.asString => GeneCards
+      case GeneDB.asString => GeneDB
+      case GeneID.asString => GeneID
+      case GeneReviews.asString => GeneReviews
+      case GeneWiki.asString => GeneWiki
+      case GenomeRNAi.asString => GenomeRNAi
+      case GeneTree.asString => GeneTree
+      case Genevisible.asString => Genevisible
+      case GO.asString => GO
+      case Gramene.asString => Gramene
+      case GuidetoPHARMACOLOGY.asString => GuidetoPHARMACOLOGY
+      case HGNC.asString => HGNC
+      case `H-InvDB`.asString => `H-InvDB`
+      case HAMAP.asString => HAMAP
+      case HOGENOM.asString => HOGENOM
+      case HOVERGEN.asString => HOVERGEN
+      case HPA.asString => HPA
+      case InParanoid.asString => InParanoid
+      case IntAct.asString => IntAct
+      case InterPro.asString => InterPro
+      case IPI.asString => IPI
+      case iPTMnet.asString => iPTMnet
+      case KEGG.asString => KEGG
+      case KO.asString => KO
+      case LegioList.asString => LegioList
+      case Leproma.asString => Leproma
+      case MaizeGDB.asString => MaizeGDB
+      case MalaCards.asString => MalaCards
+      case MaxQB.asString => MaxQB
+      case MEROPS.asString => MEROPS
+      case MGI.asString => MGI
+      case MIM.asString => MIM
+      case MINT.asString => MINT
+      case mycoCLAP.asString => mycoCLAP
+      case neXtProt.asString => neXtProt
+      case OGP.asString => OGP
+      case OMA.asString => OMA
+      case Orphanet.asString => Orphanet
+      case OrthoDB.asString => OrthoDB
+      case PANTHER.asString => PANTHER
+      case PATRIC.asString => PATRIC
+      case PaxDb.asString => PaxDb
+      case PDB.asString => PDB
+      case PDBsum.asString => PDBsum
+      case PeptideAtlas.asString => PeptideAtlas
+      case PeroxiBase.asString => PeroxiBase
+      case Pfam.asString => Pfam
+      case PharmGKB.asString => PharmGKB
+      case PhosphoSite.asString => PhosphoSite
+      case PhylomeDB.asString => PhylomeDB
+      case PIR.asString => PIR
+      case PIRSF.asString => PIRSF
+      case `PMAP-CutDB`.asString => `PMAP-CutDB`
+      case PomBase.asString => PomBase
+      case PRIDE.asString => PRIDE
+      case PRINTS.asString => PRINTS
+      case ProDom.asString => ProDom
+      case PRO.asString => PRO
+      case ProMEX.asString => ProMEX
+      case PROSITE.asString => PROSITE
+      case ProteinModelPortal.asString => ProteinModelPortal
+      case PseudoCAP.asString => PseudoCAP
+      case Reactome.asString => Reactome
+      case REBASE.asString => REBASE
+      case RefSeq.asString => RefSeq
+      case `REPRODUCTION-2DPAGE`.asString => `REPRODUCTION-2DPAGE`
+      case RGD.asString => RGD
+      case `SABIO-RK`.asString => `SABIO-RK`
+      case SGD.asString => SGD
+      case SignaLink.asString => SignaLink
+      case SIGNOR.asString => SIGNOR
+      case SMART.asString => SMART
+      case SMR.asString => SMR
+      case STRING.asString => STRING
+      case SUPFAM.asString => SUPFAM
+      case SWISS.asString => SWISS
+      case SwissLipids.asString => SwissLipids
+      case SwissPalm.asString => SwissPalm
+      case TAIR.asString => TAIR
+      case TCDB.asString => TCDB
+      case TIGRFAMs.asString => TIGRFAMs
+      case TopDownProteomics.asString => TopDownProteomics
+      case TreeFam.asString => TreeFam
+      case TubercuList.asString => TubercuList
+      case `UCD-2DPAGE`.asString => `UCD-2DPAGE`
+      case UniGene.asString => UniGene
+      case UCSC.asString => UCSC
+      case UniCarbKB.asString => UniCarbKB
+      case UniPathway.asString => UniPathway
+      case VectorBase.asString => VectorBase
+      case `World-2DPAGE`.asString => `World-2DPAGE`
+      case WormBase.asString => WormBase
+      case WBParaSite.asString => WBParaSite
+      case Xenbase.asString => Xenbase
+      case ZFIN.asString => ZFIN
+  }
+}
 
 /* http://web.expasy.org/docs/userman.html#PE_line */
 sealed trait ProteinExistence
@@ -323,8 +467,7 @@ sealed trait ProteinExistence
 
 /* http://web.expasy.org/docs/userman.html#KW_line */
 case class Keyword(
-  val id          : String,
-  val description : String
+  val id: String
 )
 
 /* http://web.expasy.org/docs/userman.html#FT_line */
@@ -376,6 +519,50 @@ sealed trait FeatureKey { lazy val asString: String = toString }
   case object STRAND        extends FeatureKey
   case object TURN          extends FeatureKey
 
+case object FeatureKey {
+
+  def fromString(rep: String): FeatureKey = rep match {
+    case INIT_MET.asString => INIT_MET
+    case SIGNAL.asString => SIGNAL
+    case PROPEP.asString => PROPEP
+    case TRANSIT.asString => TRANSIT
+    case CHAIN.asString => CHAIN
+    case PEPTIDE.asString => PEPTIDE
+    case TOPO_DOM.asString => TOPO_DOM
+    case TRANSMEM.asString => TRANSMEM
+    case INTRAMEM.asString => INTRAMEM
+    case DOMAIN.asString => DOMAIN
+    case REPEAT.asString => REPEAT
+    case CA_BIND.asString => CA_BIND
+    case ZN_FING.asString => ZN_FING
+    case DNA_BIND.asString => DNA_BIND
+    case NP_BIND.asString => NP_BIND
+    case REGION.asString => REGION
+    case COILED.asString => COILED
+    case MOTIF.asString => MOTIF
+    case COMPBIAS.asString => COMPBIAS
+    case ACT_SITE.asString => ACT_SITE
+    case METAL.asString => METAL
+    case BINDING.asString => BINDING
+    case SITE.asString => SITE
+    case NON_STD.asString => NON_STD
+    case MOD_RES.asString => MOD_RES
+    case LIPID.asString => LIPID
+    case CARBOHYD.asString => CARBOHYD
+    case DISULFID.asString => DISULFID
+    case CROSSLNK.asString => CROSSLNK
+    case VAR_SEQ.asString => VAR_SEQ
+    case VARIANT.asString => VARIANT
+    case MUTAGEN.asString => MUTAGEN
+    case UNSURE.asString => UNSURE
+    case CONFLICT.asString => CONFLICT
+    case NON_CONS.asString => NON_CONS
+    case NON_TER.asString => NON_TER
+    case HELIX.asString => HELIX
+    case STRAND.asString => STRAND
+    case TURN.asString => TURN
+  }
+}
 
 /* http://web.expasy.org/docs/userman.html#SQ_line */
 case class SequenceHeader(
