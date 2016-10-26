@@ -4,4 +4,13 @@
 [![](https://img.shields.io/badge/license-AGPLv3-blue.svg)](https://tldrlegal.com/license/gnu-affero-general-public-license-v3-%28agpl-3.0%29)
 [![](https://img.shields.io/badge/contact-gitter_chat-dd1054.svg)](https://gitter.im/bio4j/data.uniprot)
 
-Project description here.
+An ADT and flat-file parser for UniProt [entries][uniprot-user-manual]. Reasonably fast and with minimal memory overhead, designed for one-entry-at-a-time processing.
+
+### Missing features
+
+- No support for any of the [reference lines][uniprot-reference-lines]; parsers will jsut skip them.
+- Some extra information part of some database cross-references is not parsed
+- the model for feature types is a bit primitive, lacking type-specific information
+
+[uniprot-user-manual]: http://web.expasy.org/docs/userman.html
+[uniprot-reference-lines]: http://web.expasy.org/docs/userman.html#Ref_line
