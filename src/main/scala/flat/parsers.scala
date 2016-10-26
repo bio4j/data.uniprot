@@ -1,7 +1,7 @@
-package bio4j.data.uniprot
+package bio4j.data.uniprot.flat
 
 import java.time.LocalDate
-import seqOps._
+import bio4j.data.uniprot.seqOps._
 
 case object parsers {
 

@@ -1,16 +1,16 @@
 package bio4j.data.uniprot.test
 
 import org.scalatest.FunSuite
-import bio4j.data.uniprot._
+import bio4j.data.uniprot._, flat._
 import java.time.LocalDate
 
 class Lines extends FunSuite {
 
   test("ID") {
 
-    val line1 = lines.ID("CYC_BOVIN               Reviewed;         104 AA.")
-    val line2 = lines.ID("GIA2_GIALA              Reviewed;         296 AA.")
-    val line3 = lines.ID("Q5JU06_HUMAN            Unreviewed;       268 AA.")
+    val line1 = ID("CYC_BOVIN               Reviewed;         104 AA.")
+    val line2 = ID("GIA2_GIALA              Reviewed;         296 AA.")
+    val line3 = ID("Q5JU06_HUMAN            Unreviewed;       268 AA.")
 
     assert {
       line1.id      === "CYC_BOVIN" &&
@@ -33,14 +33,14 @@ class Lines extends FunSuite {
 
   test("AC") {
 
-    val lines1 = lines.AC(
+    val lines1 = AC(
       Seq(
         "Q16653; O00713; O00714; O00715; Q13054; Q13055; Q14855; Q92891;",
         "Q92892; Q92893; Q92894; Q92895; Q93053; Q96KU9; Q96KV0; Q96KV1;"
       )
     )
 
-    val lines2 = lines.AC(
+    val lines2 = AC(
       Seq("Q99605;")
     )
 
@@ -51,7 +51,7 @@ class Lines extends FunSuite {
 
   test("DT") {
 
-    val lines1 = lines.DT(
+    val lines1 = DT(
       Seq(
         "01-OCT-1996, integrated into UniProtKB/Swiss-Prot.",
         "01-OCT-1996, sequence version 1.",
@@ -59,7 +59,7 @@ class Lines extends FunSuite {
       )
     )
 
-    val lines2 = lines.DT(
+    val lines2 = DT(
       Seq(
         "01-FEB-1999, integrated into UniProtKB/TrEMBL.",
         "15-OCT-2000, sequence version 2.",
@@ -76,7 +76,7 @@ class Lines extends FunSuite {
 
   test("DE") {
 
-    val lines1 = lines.DE(
+    val lines1 = DE(
       Seq(
         "RecName: Full=Annexin A5;",
         "         Short=Annexin-5;",
@@ -132,7 +132,7 @@ class Lines extends FunSuite {
 
   test("GN") {
 
-    val gn = lines.GN(
+    val gn = GN(
       Seq(
         "Name=Jon99Cii; Synonyms=SER1, SER5, Ser99Da; ORFNames=CG7877;",
         "and",
@@ -164,9 +164,9 @@ class Lines extends FunSuite {
 
   test("OG") {
 
-    val og1 = lines.OG(Seq("Hydrogenosome."))
-    val og2 = lines.OG(Seq("Mitochondrion."))
-    val og4 = lines.OG(
+    val og1 = OG(Seq("Hydrogenosome."))
+    val og2 = OG(Seq("Mitochondrion."))
+    val og4 = OG(
       Seq(
         "Plasmid R6-5, Plasmid IncFII R100 (NR1), and",
         "Plasmid IncFII R1-19 (R1 drd-19)."
@@ -186,7 +186,7 @@ class Lines extends FunSuite {
 
   test("OX") {
 
-    val ox1 = lines.OX("NCBI_TaxID=9606;")
+    val ox1 = OX("NCBI_TaxID=9606;")
 
     assert {
       ox1.taxonomyCrossReference === TaxonomyCrossReference("9606")
@@ -195,7 +195,7 @@ class Lines extends FunSuite {
 
   test("OH") {
 
-    val oh1 = lines.OH(
+    val oh1 = OH(
       Vector(
         "NCBI_TaxID=9481; Callithrix.",
         "NCBI_TaxID=9536; Cercopithecus hamlyni (Owl-faced monkey) (Hamlyn's monkey).",
@@ -217,7 +217,7 @@ class Lines extends FunSuite {
 
   test("CC") {
 
-    val cc1 = lines.CC(
+    val cc1 = CC(
       Vector(
         "-!- ALLERGEN: Causes an allergic reaction in human. Minor allergen of",
         "    bovine dander.",
@@ -246,7 +246,7 @@ class Lines extends FunSuite {
 
   test("DR") {
 
-    val dr1 = lines.DR(
+    val dr1 = DR(
       Vector(
         "EMBL; U29082; AAA68403.1; -; Genomic_DNA.",
         "Allergome; 3541; Asc s 1.0101.",
@@ -272,11 +272,11 @@ class Lines extends FunSuite {
 
   test("PE") {
 
-    val pe1 = lines.PE("1: Evidence at protein level")
-    val pe2 = lines.PE("2: Evidence at transcript level")
-    val pe3 = lines.PE("3: Inferred from homology")
-    val pe4 = lines.PE("4: Predicted")
-    val pe5 = lines.PE("5: Uncertain")
+    val pe1 = PE("1: Evidence at protein level")
+    val pe2 = PE("2: Evidence at transcript level")
+    val pe3 = PE("3: Inferred from homology")
+    val pe4 = PE("4: Predicted")
+    val pe5 = PE("5: Uncertain")
 
     assert {
       pe1.proteinExistence === EvidenceAtProteinLevel     &&
@@ -289,7 +289,7 @@ class Lines extends FunSuite {
 
   test("KW") {
 
-    val kw1 = lines.KW(
+    val kw1 = KW(
       Vector(
         "3D-structure; Alternative splicing; Alzheimer disease; Amyloid;",
         "Apoptosis; Cell adhesion; Coated pits; Copper;"
@@ -311,7 +311,7 @@ class Lines extends FunSuite {
   }
 
   test("FT") {
-    val ft1 = lines.FT(
+    val ft1 = FT(
       Seq(
         "NON_TER       1      1",
         "SIGNAL       <1     10       {ECO:0000250}.",
@@ -343,7 +343,7 @@ class Lines extends FunSuite {
 
   test("SQ") {
 
-    val sq1 = lines.SQ(
+    val sq1 = SQ(
       "SEQUENCE   486 AA;  55639 MW;  D7862E867AD74383 CRC64;"
     )
 
@@ -358,7 +358,7 @@ class Lines extends FunSuite {
 
   test("  ") {
 
-    val sd1 = lines.SequenceData(
+    val sd1 = SequenceData(
       Vector(
         "MTILASICKL GNTKSTSSSI GSSYSSAVSF GSNSVSCGEC GGDGPSFPNA SPRTGVKAGV",
         "NVDGLLGAIG KTVNGMLISP NGGGGGMGMG GGSCGCI"

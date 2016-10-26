@@ -1,4 +1,4 @@
-package bio4j.data.uniprot.lines
+package bio4j.data.uniprot.flat
 
 import bio4j.data.uniprot._, seqOps._
 import java.time.LocalDate

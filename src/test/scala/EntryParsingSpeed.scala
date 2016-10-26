@@ -1,38 +1,38 @@
 package bio4j.data.uniprot.test
 
 import org.scalatest.FunSuite
-
+import bio4j.test.ReleaseOnlyTest
 import bio4j.data.uniprot._
 import java.time.LocalDate
 
 class EntryParsingSpeed extends FunSuite {
 
-  // ~10s, raw read speed is ~8s
-  ignore("split whole SwissProt into entry lines") {
+  // more or less the same as the raw read speed
+  test("split whole SwissProt into entry lines", ReleaseOnlyTest) {
 
-    parsers.entries(
+    flat.parsers.entries(
       io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
     )
     .foreach { e => () }
   }
 
-  // ~11s with everything lazy
-  ignore("parse whole SwissProt") {
+  // more or less the same as the raw read speed; everything's lazy here
+  test("parse whole SwissProt", ReleaseOnlyTest) {
 
-    parsers.entries(
+    flat.parsers.entries(
       io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
     )
-    .map(FlatFileEntry.from)
+    .map(flat.Entry.from)
     .foreach { e => () }
   }
 
   // ~26s
-  ignore("parse whole SwissProt, access some data") {
+  test("parse whole SwissProt, access some data", ReleaseOnlyTest) {
 
-    parsers.entries(
+    flat.parsers.entries(
       io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
     )
-    .map(FlatFileEntry.from)
+    .map(flat.Entry.from)
     .foreach { e =>
 
       val z = e.accessionNumbers.primary
@@ -44,15 +44,15 @@ class EntryParsingSpeed extends FunSuite {
   }
 
   // ~15s
-  ignore("All SwissProt entries have a full name") {
+  test  ("All SwissProt entries have a full name", ReleaseOnlyTest) {
 
     val noOfEntries = 551987
 
     val fullNameCount =
-      parsers.entries(
+      flat.parsers.entries(
         io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
       )
-      .map(FlatFileEntry.from)
+      .map(flat.Entry.from)
       .foldLeft(0){ (acc, e) =>
 
         acc + e.description.recommendedName.fold(0){_ => 1}
