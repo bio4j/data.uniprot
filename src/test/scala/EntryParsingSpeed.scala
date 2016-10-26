@@ -1,14 +1,14 @@
 package bio4j.data.uniprot.test
 
 import org.scalatest.FunSuite
-
+import bio4j.test.ReleaseOnlyTest
 import bio4j.data.uniprot._
 import java.time.LocalDate
 
 class EntryParsingSpeed extends FunSuite {
 
   // more or less the same as the raw read speed
-  test("split whole SwissProt into entry lines") {
+  test("split whole SwissProt into entry lines", ReleaseOnlyTest) {
 
     flat.parsers.entries(
       io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
@@ -17,7 +17,7 @@ class EntryParsingSpeed extends FunSuite {
   }
 
   // more or less the same as the raw read speed; everything's lazy here
-  test("parse whole SwissProt") {
+  test("parse whole SwissProt", ReleaseOnlyTest) {
 
     flat.parsers.entries(
       io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
@@ -27,7 +27,7 @@ class EntryParsingSpeed extends FunSuite {
   }
 
   // ~26s
-  test("parse whole SwissProt, access some data") {
+  test("parse whole SwissProt, access some data", ReleaseOnlyTest) {
 
     flat.parsers.entries(
       io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
@@ -44,7 +44,7 @@ class EntryParsingSpeed extends FunSuite {
   }
 
   // ~15s
-  test("All SwissProt entries have a full name") {
+  test  ("All SwissProt entries have a full name", ReleaseOnlyTest) {
 
     val noOfEntries = 551987
 
