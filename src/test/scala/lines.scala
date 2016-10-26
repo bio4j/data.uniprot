@@ -368,4 +368,20 @@ class Lines extends FunSuite {
       )
     }
   }
+
+  test("  ") {
+
+    val sd1 = lines.SequenceData(
+      Vector(
+        "MTILASICKL GNTKSTSSSI GSSYSSAVSF GSNSVSCGEC GGDGPSFPNA SPRTGVKAGV",
+        "NVDGLLGAIG KTVNGMLISP NGGGGGMGMG GGSCGCI"
+      )
+    )
+
+    assert {
+      sd1.sequence === Sequence(
+        "MTILASICKLGNTKSTSSSIGSSYSSAVSFGSNSVSCGECGGDGPSFPNASPRTGVKAGVNVDGLLGAIGKTVNGMLISPNGGGGGMGMGGGSCGCI"
+      )
+    }
+  }
 }

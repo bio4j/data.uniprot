@@ -29,6 +29,7 @@ sealed trait LineType { lazy val asString: String = toString }
   case object KW extends LineType
   case object FT extends LineType
   case object SQ extends LineType
+  case object `  ` extends LineType
 
 case object LineType {
 
