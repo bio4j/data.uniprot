@@ -13,7 +13,8 @@ extends AnyEntry {
   private lazy val id: lines.ID =
     lines.ID(linesOfType(ID).head)
 
-  lazy val identification: Identification =
+  @inline
+  final def identification: Identification =
     Identification(
       entryName = id.id,
       status    = id.status,
@@ -23,9 +24,10 @@ extends AnyEntry {
   private lazy val ac: lines.AC =
     lines.AC(linesOfType(AC))
 
-  lazy val accessionNumbers: AccessionNumber = {
+  @inline
+  final def accessionNumbers: AccessionNumber = {
 
-    lazy val accesions =
+    val accesions =
       ac.accesions
 
     AccessionNumber(
@@ -37,7 +39,8 @@ extends AnyEntry {
   private lazy val dt: lines.DT =
     lines.DT(linesOfType(DT))
 
-  lazy val date: Date =
+  @inline
+  final def date: Date =
     Date(
       creation              = dt.creation,
       sequenceLastModified  = dt.sequenceLastModified,
@@ -79,13 +82,15 @@ extends AnyEntry {
   private lazy val oh: lines.OH =
     lines.OH(linesOfType(OH))
 
-  lazy val organismHost: Seq[TaxonomyCrossReference] =
+  @inline
+  final def organismHost: Seq[TaxonomyCrossReference] =
     oh.taxonomyCrossReferences
 
   private lazy val cc: lines.CC =
     lines.CC(linesOfType(CC))
 
-  lazy val comments: Seq[Comment] =
+  @inline
+  final def comments: Seq[Comment] =
     cc.comments
 
   private lazy val dr: lines.DR =
@@ -106,9 +111,19 @@ extends AnyEntry {
   lazy val keywords: Seq[Keyword] =
     kw.keywords
 
-  lazy val features: Seq[Feature] = ???
+  private lazy val ft: lines.FT =
+    lines.FT(linesOfType(FT))
 
-  lazy val sequenceHeader: SequenceHeader = ???
+  @inline
+  final def features: Seq[Feature] =
+    ft.features
+
+  private lazy val sq: lines.SQ =
+    lines.SQ(linesOfType(SQ).head)
+
+  @inline
+  final def sequenceHeader: SequenceHeader =
+    sq.sequenceHeader
 
   lazy val sequence: Sequence = ???
 }

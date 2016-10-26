@@ -13,5 +13,6 @@ libraryDependencies ++= Seq(
 testOptions in Test += Tests.Argument("-oD")
 
 wartremoverErrors in (Compile, compile) := Seq()
-
 wartremoverErrors in (Test, compile) := Seq()
+
+scalacOptions ++= Seq("-Yinline-warnings", "-optimise")

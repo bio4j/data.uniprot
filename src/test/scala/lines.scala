@@ -353,4 +353,19 @@ class Lines extends FunSuite {
       )
     }
   }
+
+  test("SQ") {
+
+    val sq1 = lines.SQ(
+      "SEQUENCE   486 AA;  55639 MW;  D7862E867AD74383 CRC64;"
+    )
+
+    assert {
+      sq1.sequenceHeader === SequenceHeader(
+        length          = 486,
+        molecularWeight = 55639,
+        crc64           = "D7862E867AD74383"
+      )
+    }
+  }
 }
