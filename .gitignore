@@ -10,9 +10,8 @@ project/plugins/project/
 # Scala-IDE specific
 .scala_dependencies
 
-# data folders
-data/in/
-data/out/
+# SwissProt .dat file
+uniprot_sprot.dat
 
 .tags*
 .sublime*

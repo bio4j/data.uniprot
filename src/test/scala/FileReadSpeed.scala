@@ -10,16 +10,6 @@ class FileReadSpeed extends FunSuite {
   // ~8s
   test("read whole SwissProt", ReleaseOnlyTest) {
 
-    io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
-      .foreach { e => () }
-  }
-
-  // just for comparison
-  test("read whole SwissProt Java Stream", ReleaseOnlyTest) {
-
-    Files.lines(Paths.get("/home/edu/Downloads/sprot/uniprot_sprot.dat"))
-      .iterator()
-      .asScala
-      .foreach { e => () }
+    testData.swissProtLines.foreach { e => () }
   }
 }

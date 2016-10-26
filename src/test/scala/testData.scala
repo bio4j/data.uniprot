@@ -4,6 +4,12 @@ import org.scalatest.FunSuite
 
 case object testData {
 
+  lazy val swissProtFile =
+    io.Source.fromFile("uniprot_sprot.dat")
+
+  def swissProtLines =
+    swissProtFile.getLines
+
   lazy val entryLines: Vector[String] =
     entry.split('\n').dropWhile(_.isEmpty).toVector
 
