@@ -401,6 +401,50 @@ sealed trait FeatureKey { lazy val asString: String = toString }
   case object STRAND        extends FeatureKey
   case object TURN          extends FeatureKey
 
+case object FeatureKey {
+
+  def fromString(rep: String): FeatureKey = rep match {
+    case INIT_MET.asString => INIT_MET
+    case SIGNAL.asString => SIGNAL
+    case PROPEP.asString => PROPEP
+    case TRANSIT.asString => TRANSIT
+    case CHAIN.asString => CHAIN
+    case PEPTIDE.asString => PEPTIDE
+    case TOPO_DOM.asString => TOPO_DOM
+    case TRANSMEM.asString => TRANSMEM
+    case INTRAMEM.asString => INTRAMEM
+    case DOMAIN.asString => DOMAIN
+    case REPEAT.asString => REPEAT
+    case CA_BIND.asString => CA_BIND
+    case ZN_FING.asString => ZN_FING
+    case DNA_BIND.asString => DNA_BIND
+    case NP_BIND.asString => NP_BIND
+    case REGION.asString => REGION
+    case COILED.asString => COILED
+    case MOTIF.asString => MOTIF
+    case COMPBIAS.asString => COMPBIAS
+    case ACT_SITE.asString => ACT_SITE
+    case METAL.asString => METAL
+    case BINDING.asString => BINDING
+    case SITE.asString => SITE
+    case NON_STD.asString => NON_STD
+    case MOD_RES.asString => MOD_RES
+    case LIPID.asString => LIPID
+    case CARBOHYD.asString => CARBOHYD
+    case DISULFID.asString => DISULFID
+    case CROSSLNK.asString => CROSSLNK
+    case VAR_SEQ.asString => VAR_SEQ
+    case VARIANT.asString => VARIANT
+    case MUTAGEN.asString => MUTAGEN
+    case UNSURE.asString => UNSURE
+    case CONFLICT.asString => CONFLICT
+    case NON_CONS.asString => NON_CONS
+    case NON_TER.asString => NON_TER
+    case HELIX.asString => HELIX
+    case STRAND.asString => STRAND
+    case TURN.asString => TURN
+  }
+}
 
 /* http://web.expasy.org/docs/userman.html#SQ_line */
 case class SequenceHeader(

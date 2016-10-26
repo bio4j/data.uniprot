@@ -322,4 +322,35 @@ class Lines extends FunSuite {
       )
     }
   }
+
+  test("FT") {
+    val ft1 = lines.FT(
+      Seq(
+        "NON_TER       1      1",
+        "SIGNAL       <1     10       {ECO:0000250}.",
+        "CHAIN        19     87       A-agglutinin.",
+        "PROPEP       22     43       Removed by a dipeptidylpeptidase.",
+        "MOD_RES      41     41       Arginine amide. {ECO:0000250}.",
+        "DISULFID    110    115",
+        "CARBOHYD    251    251       N-linked (GlcNAc...).",
+        "                             /FTId=CAR_000070.",
+        "CONFLICT    327    327       E -> R (in Ref. 2).",
+        "CONFLICT     77     77       Missing (in Ref. 1)."
+      )
+    )
+
+    assert {
+      ft1.features === Vector(
+        Feature(NON_TER,"1","1",""),
+        Feature(SIGNAL,"<1","10","{ECO:0000250}."),
+        Feature(CHAIN,"19","87","A-agglutinin."),
+        Feature(PROPEP,"22","43","Removed by a dipeptidylpeptidase."),
+        Feature(MOD_RES,"41","41","Arginine amide. {ECO:0000250}."),
+        Feature(DISULFID,"110","115",""),
+        Feature(CARBOHYD,"251","251","N-linked (GlcNAc...). /FTId=CAR_000070."),
+        Feature(CONFLICT,"327","327","E -> R (in Ref. 2)."),
+        Feature(CONFLICT,"77","77","Missing (in Ref. 1).")
+      )
+    }
+  }
 }
