@@ -1,4 +1,4 @@
-package bio4j.data.uniprot.lines
+package bio4j.data.uniprot.flat
 
 import bio4j.data.uniprot.Sequence
 import bio4j.data.uniprot.seqOps._

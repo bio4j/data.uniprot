@@ -10,7 +10,7 @@ class FlatFileEntry extends FunSuite {
   test("can parse sample entry") {
 
     val e =
-      FlatFileEntry from testData.entryLines
+      flat.Entry from testData.entryLines
 
     // ID line
     assert { e.identification.entryName == "ZWILC_MOUSE" }
