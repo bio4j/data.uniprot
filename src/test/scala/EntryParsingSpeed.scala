@@ -7,19 +7,19 @@ import java.time.LocalDate
 
 class EntryParsingSpeed extends FunSuite {
 
-  // ~10s, raw read speed is ~8s
-  ignore("split whole SwissProt into entry lines") {
+  // more or less the same as the raw read speed
+  test("split whole SwissProt into entry lines") {
 
-    parsers.entries(
+    flat.parsers.entries(
       io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
     )
     .foreach { e => () }
   }
 
-  // ~9s with everything lazy
+  // more or less the same as the raw read speed; everything's lazy here
   test("parse whole SwissProt") {
 
-    parsers.entries(
+    flat.parsers.entries(
       io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
     )
     .map(flat.Entry.from)
@@ -29,7 +29,7 @@ class EntryParsingSpeed extends FunSuite {
   // ~26s
   test("parse whole SwissProt, access some data") {
 
-    parsers.entries(
+    flat.parsers.entries(
       io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
     )
     .map(flat.Entry.from)
@@ -44,12 +44,12 @@ class EntryParsingSpeed extends FunSuite {
   }
 
   // ~15s
-  ignore("All SwissProt entries have a full name") {
+  test("All SwissProt entries have a full name") {
 
     val noOfEntries = 551987
 
     val fullNameCount =
-      parsers.entries(
+      flat.parsers.entries(
         io.Source.fromFile("/home/edu/Downloads/sprot/uniprot_sprot.dat").getLines
       )
       .map(flat.Entry.from)
