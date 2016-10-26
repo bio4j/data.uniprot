@@ -2,7 +2,6 @@ package bio4j.data.uniprot.lines
 
 import bio4j.data.uniprot._
 
-// TODO get data through slices, see http://web.expasy.org/docs/userman.html#FT_line
 /*
   The format is
 

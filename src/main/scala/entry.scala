@@ -313,7 +313,6 @@ sealed trait ResourceAbbreviation {
 
 case object ResourceAbbreviation {
 
-  // TODO super ugly match
   def fromString(rep: String): ResourceAbbreviation =
     rep match {
       case EMBL.asString  => EMBL
