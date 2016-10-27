@@ -8,7 +8,8 @@ An ADT and flat-file parser for UniProt [entries][uniprot-user-manual]. Reasonab
 
 - No support for any of the [reference lines][uniprot-reference-lines]; parsers will jsut skip them.
 - Some extra information part of some database cross-references is not parsed
-- the model for feature types is a bit primitive, lacking type-specific information
+- The model for feature types is a bit primitive, lacking type-specific information
+- The OG, OX lines are not parsed; see [#9](/../../issues/9) and [#10](/../../issues/10)
 
 [uniprot-user-manual]: http://web.expasy.org/docs/userman.html
 [uniprot-reference-lines]: http://web.expasy.org/docs/userman.html#Ref_line
