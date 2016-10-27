@@ -1,0 +1,6 @@
+
+First release. Significant features missing:
+
+1. no reference lines parsing
+2. the model for comments and features is a bit coarse
+3. UniProt taxonomy lines are not parsed, see #9 and #10 
