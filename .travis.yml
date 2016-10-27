@@ -1,23 +1,23 @@
-# http://www.scala-sbt.org/0.13/docs/Travis-CI-with-sbt.html
 language: scala
 scala:
-  - 2.11.8
+- 2.11.8
 jdk:
-  - oraclejdk8
+- oraclejdk8
 script:
-  - sbt ++$TRAVIS_SCALA_VERSION compile test
-  # Tricks to avoid unnecessary cache updates
-  - find $HOME/.sbt -name "*.lock" | xargs rm
-  - find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
+- sbt ++$TRAVIS_SCALA_VERSION compile clean coverage test coverageReport codacyCoverage
+- find $HOME/.sbt -name "*.lock" | xargs rm
+- find $HOME/.ivy2 -name "ivydata-*.properties" | xargs rm
 matrix:
   fast_finish: true
 notifications:
   email: false
   webhooks:
-# Use container-based infrastructure
 sudo: false
-# These directories are cached to S3 at the end of the build
 cache:
   directories:
-    - $HOME/.ivy2/cache
-    - $HOME/.sbt/boot/
+  - "$HOME/.ivy2/cache"
+  - "$HOME/.sbt/boot/"
+# codacy
+env:
+  global:
+    secure: mfrx1ifbd7XmnuvzVnrFYGg9O357xY2S/Z2+bgwVrGmhaHvFObl+PsVCStGtBB80jemRThrcTi0xbJSGhHlt0+whtDthxJbwkabZ4XXP9HiIX9mie1tvEuqywapwuHUMXfdIRqBG12QXFUkDQsHjbpEcVGkDgeMvSkvivkOdDWlnR4KNRUxvPkCjNM/58nwRgBCsI198yNoQu99NwszRwHYGpqWrxgskEiMUuiitQUBHfcM8hHCGZy1PizlnzxaqF7x2sGXFnUmWdk/LRJChrZVc+1cfuLnbE+jKtlmvvyFcQrVcDBoODsao7xMpMck3PgcerYED5h+6LxAHzfJI9bGQYGwRt52vqHxJetEDIief2HuB8BhY0GzO2jeoU8Q/kQGi92i967n3Xi0yEsYu9lzhQKMBJVkplWX60ZbDS9worLKZ2xVCArLCLsCytJWjaFtv38aMRlbjvEq8Fz2Cm/Ct1sx8syVirSy93WIklaF+A9Mum44OMUOsHFBCAbZJp2fda0YuLHntA1ccx058Gtes8pREsq3A6QHknxp0buF7z/Nbm2SXhkWiBZSkZ/7JCYk9cQB1rcoIuXEyD7njvgpPBSpimGDzX53tKz5liQwbWqExsZ/02+ogB5+lVDSwKSCkBYcHTicOOfSfZtpwtiMSCojwni6FvwBvw0q79Yw=
