@@ -1,7 +1,7 @@
 
 This set of types serves as a generic model for UniProt entries. The main reference is the **[UniProt Knowledgebase user manual](http://web.expasy.org/docs/userman.html)**.
 
-The method names match the "Content" description in the table at the end of the [General Structure section](http://web.expasy.org/docs/userman.html#entrystruc), with plurals signaling a `Seq` return type.
+The method names match (whenever possible) the "Content" description in the table at the end of the [General Structure section](http://web.expasy.org/docs/userman.html#entrystruc), with plurals signaling a `Seq` return type.
 
 
 ```scala
