@@ -6,8 +6,8 @@ import org.scalatest.FunSuite
 
 case object testData {
 
-  lazy val swissProtFile =
-    io.Source.fromFile("uniprot_sprot.dat")
+  def swissProtFile =
+    io.Source.fromFile("./uniprot_sprot.dat")
 
   def swissProtLines =
     swissProtFile.getLines
