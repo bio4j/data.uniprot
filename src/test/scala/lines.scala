@@ -242,6 +242,40 @@ class Lines extends FunSuite {
         Cofactor("FAD. {ECO:0000255|HAMAP-Rule:MF_01202}.")
       )
     }
+
+    val isoformsCC = CC(
+      Vector(
+        "-!- ALTERNATIVE PRODUCTS:",
+        "    Event=Alternative splicing, Alternative initiation; Named isoforms=8;",
+        "      Comment=Additional isoforms seem to exist;",
+        "    Name=1; Synonyms=Non-muscle isozyme;",
+        "      IsoId=Q15746-1; Sequence=Displayed;",
+        "    Name=2;",
+        "      IsoId=Q15746-2; Sequence=VSP_004791;",
+        "    Name=3A;",
+        "      IsoId=Q15746-3; Sequence=VSP_004792, VSP_004794;",
+        "    Name=3B;",
+        "      IsoId=Q15746-4; Sequence=VSP_004791, VSP_004792, VSP_004794;",
+        "    Name=4;",
+        "      IsoId=Q15746-5; Sequence=VSP_004792, VSP_004793;",
+        "    Name=6; Synonyms=Telokin;",
+        "      IsoId=Q15746-8; Sequence=VSP_018846;",
+        "      Note=Produced by alternative initiation at Met-1761 of isoform",
+        "      1. Has no catalytic activity;"
+      )
+    )
+
+    assert {
+      isoformsCC.comments === Vector(
+        Isoform("1","Q15746-1",true),
+        Isoform("2","Q15746-2",false),
+        Isoform("3A","Q15746-3",false),
+        Isoform("3B","Q15746-4",false),
+        Isoform("4","Q15746-5",false),
+        Isoform("6","Q15746-8",false)
+      )
+    }
+
   }
 
   test("DR") {
