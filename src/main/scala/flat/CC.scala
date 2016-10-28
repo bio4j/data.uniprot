@@ -15,46 +15,46 @@ case class CC(val lines: Seq[String])  {
 
     topic match {
 
-      case "ALLERGEN"                       => Vector( Allergen(contents.mkString(" ")) )
+      case "ALLERGEN"                       => List( Allergen(contents.mkString(" ")) )
       case "ALTERNATIVE PRODUCTS"           => isoformBlocks(contents.tail) map isoformFromBlock
-      case "BIOPHYSICOCHEMICAL PROPERTIES"  => Vector( BiophysicochemicalProperties(contents.mkString(" ")) )
-      case "BIOTECHNOLOGY"                  => Vector( Biotechnology(contents.mkString(" ")) )
-      case "CATALYTIC ACTIVITY"             => Vector( CatalyticActivity(contents.mkString(" ")) )
-      case "CAUTION"                        => Vector( Caution(contents.mkString(" ")) )
-      case "COFACTOR"                       => Vector( Cofactor(contents.mkString(" ")) )
-      case "DEVELOPMENTAL STAGE"            => Vector( DevelopmentalStage(contents.mkString(" ")) )
-      case "DISEASE"                        => Vector( Disease(contents.mkString(" ")) )
-      case "DISRUPTION PHENOTYPE"           => Vector( DisruptionPhenotype(contents.mkString(" ")) )
-      case "DOMAIN"                         => Vector( Domain(contents.mkString(" ")) )
-      case "ENZYME REGULATION"              => Vector( EnzymeRegulation(contents.mkString(" ")) )
-      case "FUNCTION"                       => Vector( Function(contents.mkString(" ")) )
-      case "INDUCTION"                      => Vector( Induction(contents.mkString(" ")) )
-      case "INTERACTION"                    => Vector( Interaction(contents.mkString(" ")) )
-      case "MASS SPECTROMETRY"              => Vector( MassSpectrometry(contents.mkString(" ")) )
-      case "MISCELLANEOUS"                  => Vector( Miscellaneous(contents.mkString(" ")) )
-      case "PATHWAY"                        => Vector( Pathway(contents.mkString(" ")) )
-      case "PHARMACEUTICAL"                 => Vector( Pharmaceutical(contents.mkString(" ")) )
-      case "POLYMORPHISM"                   => Vector( Polymorphism(contents.mkString(" ")) )
-      case "PTM"                            => Vector( PTM(contents.mkString(" ")) )
-      case "RNA EDITING"                    => Vector( RNAEditing(contents.mkString(" ")) )
-      case "SEQUENCE CAUTION"               => Vector( SequenceCaution(contents.mkString(" ")) )
-      case "SIMILARITY"                     => Vector( Similarity(contents.mkString(" ")) )
-      case "SUBCELLULAR LOCATION"           => Vector( SubcellularLocation(contents.mkString(" ")) )
-      case "SUBUNIT"                        => Vector( Subunit(contents.mkString(" ")) )
-      case "TISSUE SPECIFICITY"             => Vector( TissueSpecificity(contents.mkString(" ")) )
-      case "TOXIC DOSE"                     => Vector( ToxicDose(contents.mkString(" ")) )
-      case "WEB RESOURCE"                   => Vector( WebResource(contents.mkString(" ")) )
+      case "BIOPHYSICOCHEMICAL PROPERTIES"  => List( BiophysicochemicalProperties(contents.mkString(" ")) )
+      case "BIOTECHNOLOGY"                  => List( Biotechnology(contents.mkString(" ")) )
+      case "CATALYTIC ACTIVITY"             => List( CatalyticActivity(contents.mkString(" ")) )
+      case "CAUTION"                        => List( Caution(contents.mkString(" ")) )
+      case "COFACTOR"                       => List( Cofactor(contents.mkString(" ")) )
+      case "DEVELOPMENTAL STAGE"            => List( DevelopmentalStage(contents.mkString(" ")) )
+      case "DISEASE"                        => List( Disease(contents.mkString(" ")) )
+      case "DISRUPTION PHENOTYPE"           => List( DisruptionPhenotype(contents.mkString(" ")) )
+      case "DOMAIN"                         => List( Domain(contents.mkString(" ")) )
+      case "ENZYME REGULATION"              => List( EnzymeRegulation(contents.mkString(" ")) )
+      case "FUNCTION"                       => List( Function(contents.mkString(" ")) )
+      case "INDUCTION"                      => List( Induction(contents.mkString(" ")) )
+      case "INTERACTION"                    => List( Interaction(contents.mkString(" ")) )
+      case "MASS SPECTROMETRY"              => List( MassSpectrometry(contents.mkString(" ")) )
+      case "MISCELLANEOUS"                  => List( Miscellaneous(contents.mkString(" ")) )
+      case "PATHWAY"                        => List( Pathway(contents.mkString(" ")) )
+      case "PHARMACEUTICAL"                 => List( Pharmaceutical(contents.mkString(" ")) )
+      case "POLYMORPHISM"                   => List( Polymorphism(contents.mkString(" ")) )
+      case "PTM"                            => List( PTM(contents.mkString(" ")) )
+      case "RNA EDITING"                    => List( RNAEditing(contents.mkString(" ")) )
+      case "SEQUENCE CAUTION"               => List( SequenceCaution(contents.mkString(" ")) )
+      case "SIMILARITY"                     => List( Similarity(contents.mkString(" ")) )
+      case "SUBCELLULAR LOCATION"           => List( SubcellularLocation(contents.mkString(" ")) )
+      case "SUBUNIT"                        => List( Subunit(contents.mkString(" ")) )
+      case "TISSUE SPECIFICITY"             => List( TissueSpecificity(contents.mkString(" ")) )
+      case "TOXIC DOSE"                     => List( ToxicDose(contents.mkString(" ")) )
+      case "WEB RESOURCE"                   => List( WebResource(contents.mkString(" ")) )
     }
   }
 
   private def commentBlocks(commentLines: Seq[String]): Seq[Seq[String]] =
-    commentLines.foldLeft[Seq[Seq[String]]](Vector()){ (acc: Seq[Seq[String]], line: String) =>
+    commentLines.foldLeft[collection.mutable.Buffer[Seq[String]]](new collection.mutable.UnrolledBuffer[Seq[String]]){ (acc: collection.mutable.Buffer[Seq[String]], line: String) =>
       // extra lines for a comment
       if(line startsWith "    ") {
         acc.updated(acc.length - 1, acc.last :+ line.trim)
       }
       else {
-        acc :+ Vector(line.stripPrefix("-!-").trim)
+        acc += List(line.stripPrefix("-!-").trim)
       }
     }
 
@@ -82,12 +82,12 @@ case class CC(val lines: Seq[String])  {
   private def isoformBlocks(altProdLines: Seq[String]): Seq[Seq[String]] =
     altProdLines
       .dropWhile(altProdLine => !altProdLine.startsWith("Name="))
-      .foldLeft(Seq[Seq[String]]()){ (acc: Seq[Seq[String]], line: String) =>
+      .foldLeft(new collection.mutable.UnrolledBuffer[Seq[String]]()){ (acc: collection.mutable.UnrolledBuffer[Seq[String]], line: String) =>
       // same iso
       if(!(line startsWith "Name="))
         acc.updated(acc.length - 1, acc.last :+ line.trim)
       else
-        acc :+ Vector(line.trim)
+        acc += List(line.trim)
     }
 
   /*

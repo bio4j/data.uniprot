@@ -1,50 +1,37 @@
 package bio4j.data.uniprot.test
 
 import org.scalatest.FunSuite
+import org.scalatest.concurrent.TimeLimitedTests
+import org.scalatest.time.SpanSugar._
 import bio4j.test.ReleaseOnlyTest
 import bio4j.data.uniprot._
 import java.time.LocalDate
 
-class EntryParsingSpeed extends FunSuite {
+class EntryParsingSpeed extends FunSuite with TimeLimitedTests {
 
-  // more or less the same as the raw read speed
-  test("split whole SwissProt into entry lines", ReleaseOnlyTest) {
+  def timeLimit = 100 seconds
 
-    flat.parsers.entries(testData.swissProtLines).foreach { e => () }
-  }
+  import testData.entries
 
-  // more or less the same as the raw read speed; everything's lazy here
-  test("parse whole SwissProt", ReleaseOnlyTest) {
+  test("SwissProt all entry fields", ReleaseOnlyTest) {
 
-    flat.parsers.entries(testData.swissProtLines).map(flat.Entry.from).foreach { e => () }
-  }
+    entries.foreach { e =>
 
-  // ~26s
-  test("parse whole SwissProt, access some data", ReleaseOnlyTest) {
-
-    flat.parsers.entries(testData.swissProtLines).map(flat.Entry.from).foreach { e =>
-
-      val z = e.accessionNumbers.primary
-      val u = e.date.creation
-      val v = e.identification.status
-
-      e.description.recommendedName.foreach { n => if(n.full.isEmpty) println("empty full name!!") }
+      val id = e.identification;
+      val ac = e.accessionNumbers;
+      val dt = e.date
+      val de = e.description
+      val gn = e.geneNames
+      val og = e.organelles
+      val ox = e.taxonomyCrossReference
+      val oh = e.organismHost
+      val cc = e.comments
+      val dr = e.databaseCrossReferences
+      val pe = e.proteinExistence
+      val kw = e.keywords
+      val ft = e.features
+      val sq = e.sequenceHeader
+      val sd = e.sequence
     }
-  }
-
-  // ~15s
-  test  ("All SwissProt entries have a full name", ReleaseOnlyTest) {
-
-    val noOfEntries = 551987
-
-    val fullNameCount =
-      flat.parsers.entries(testData.swissProtLines)
-        .map(flat.Entry.from)
-        .foldLeft(0){ (acc, e) =>
-
-          acc + e.description.recommendedName.fold(0){_ => 1}
-        }
-
-    assert { fullNameCount == noOfEntries }
   }
 }

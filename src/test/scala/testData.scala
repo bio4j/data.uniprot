@@ -10,6 +10,9 @@ case object testData {
   def swissProtLines =
     swissProtFile.getLines
 
+  final def entries =
+    bio4j.data.uniprot.flat.parsers.entries(testData.swissProtLines).map(bio4j.data.uniprot.flat.Entry.from)
+
   lazy val entryLines: Vector[String] =
     entry.split('\n').dropWhile(_.isEmpty).toVector
 
