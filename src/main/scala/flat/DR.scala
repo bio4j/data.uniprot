@@ -14,19 +14,19 @@ import bio4j.data.uniprot.seqOps._
 */
 case class DR(val lines: Seq[String]) extends AnyVal {
 
+  @inline
   def databaseCrossReferences: Seq[DatabaseCrossReference] =
     lines map { line =>
 
-      val fragments = line.splitSegments(_==';')
-      val resourceAbbrv = fragments(0).trim
-      val id            = fragments(1).trim
+      val (firstFrag, rest1)  = line.span(_!=';')
+      val (secondFrag, rest2) = rest1.stripPrefix(";").span(_!=';')
 
       DatabaseCrossReference(
-        resource          = ResourceAbbreviation.fromString(resourceAbbrv),
-        identifier        = id,
+        resource          = ResourceAbbreviation.fromString(firstFrag.trim),
+        identifier        = secondFrag.trim
         // TODO other info?
-        otherInformation  = None,
-        isoformID         = None
+        // otherInformation  = None,
+        // isoformID         = None
       )
     }
 }

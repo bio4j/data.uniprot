@@ -16,18 +16,18 @@ case object parsers {
       entry
 
     @annotation.tailrec
-    private def entry_rec(acc: Vector[String]): Vector[String] =
+    private def entry_rec(acc: collection.mutable.Buffer[String]): Array[String] =
       if (rest.hasNext) {
         if( rest.head.startsWith("//") ) {
 
           rest.next()
-          acc
+          acc.toArray
         }
-        else entry_rec(acc :+ rest.next())
+        else entry_rec(acc += rest.next())
       }
-      else acc
+      else acc.toArray
 
-    private def entry: Seq[String] = entry_rec(Vector())
+    private def entry: Seq[String] = entry_rec(new collection.mutable.UnrolledBuffer())
   }
 
   // see http://stackoverflow.com/a/33521793/614394

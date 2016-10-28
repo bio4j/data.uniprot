@@ -7,23 +7,25 @@ case class SQ(val line: String) extends AnyVal {
 
   def sequenceHeader: SequenceHeader = {
 
-    val fragments = line.splitSegments(_==';')
+    // val fragments = line.splitSegments(_==';')
+
+    val (frg0, rest0) = line.stripPrefix("SEQUENCE").dropWhile(_==' ').span(_!=';')
+    val (frg1, rest1) = rest0.stripPrefix(";").span(_!=';')
+    val (frg2, rest2) = rest1.stripPrefix(";").span(_!=';')
 
     val l =
-      fragments(0)
-        .stripPrefix("SEQUENCE")
-        .dropWhile(_==' ')
+      frg0
         .takeWhile(_!=' ')
         .toInt
 
     val mw =
-      fragments(1)
+      frg1
         .dropWhile(_==' ')
         .takeWhile(_!=' ')
         .toInt
 
     val crc =
-      fragments(2)
+      frg2
         .dropWhile(_==' ')
         .takeWhile(_!=' ')
 
