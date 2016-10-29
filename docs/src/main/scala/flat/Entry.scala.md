@@ -9,16 +9,16 @@ import java.time.LocalDate
 case class Entry(
   val allLines: Seq[String]
 )
-extends AnyEntry {
+extends AnyVal with AnyEntry {
 
-  private lazy val id: ID =
+  final def id: ID =
     ID(linesOfType(LineType.ID).head)
 
   @inline
   final def identification: Identification =
     id.identification
 
-  private lazy val ac: AC =
+  final def ac: AC =
     AC(linesOfType(LineType.AC))
 
   @inline
@@ -33,21 +33,21 @@ extends AnyEntry {
     )
   }
 
-  private lazy val dt: DT =
+  final def dt: DT =
     DT(linesOfType(LineType.DT))
 
   @inline
   final def date: Date =
     dt.date
 
-  private lazy val de: DE =
+  final def de: DE =
     DE(linesOfType(LineType.DE))
 
   @inline
   final def description: Description =
     de.description
 
-  private lazy val gn: GN =
+  final def gn: GN =
     GN(linesOfType(LineType.GN))
 
   @inline
@@ -58,87 +58,92 @@ extends AnyEntry {
   final def organismSpecies: OrganismSpecies =
     ???
 
-  private lazy val og: OG =
-    OG(linesOfType(LineType.GN))
+  final def og: OG =
+    OG(linesOfType(LineType.OG))
 
-  lazy val organelles: Seq[Organelle] =
+  @inline
+  final def organelles: Seq[Organelle] =
     og.organelles
 
   @inline
   final def organismClassification: OrganismClassification =
     ???
 
-  private lazy val ox: OX =
+  final def ox: OX =
     OX(linesOfType(LineType.OX).head)
 
   @inline
   final def taxonomyCrossReference: TaxonomyCrossReference =
     ox.taxonomyCrossReference
 
-  private lazy val oh: OH =
+  final def oh: OH =
     OH(linesOfType(LineType.OH))
 
   @inline
   final def organismHost: Seq[TaxonomyCrossReference] =
     oh.taxonomyCrossReferences
 
-  private lazy val cc: CC =
+  final def cc: CC =
     CC(linesOfType(LineType.CC))
 
   @inline
   final def comments: Seq[Comment] =
     cc.comments
 
-  private lazy val dr: DR =
-    DR(linesOfType(LineType.DR))
+  final def dr: DR =
+    DR(linesOfType(LineType.DR).toList)
 
   @inline
   final def databaseCrossReferences: Seq[DatabaseCrossReference] =
     dr.databaseCrossReferences
 
-  private lazy val pe: PE =
+  final def pe: PE =
     PE(linesOfType(LineType.PE).head)
 
   @inline
   final def proteinExistence: ProteinExistence =
     pe.proteinExistence
 
-  private lazy val kw: KW =
+  final def kw: KW =
     KW(linesOfType(LineType.KW))
 
   @inline
   final def keywords: Seq[Keyword] =
     kw.keywords
 
-  private lazy val ft: FT =
+  final def ft: FT =
     FT(linesOfType(LineType.FT))
 
   @inline
   final def features: Seq[Feature] =
     ft.features
 
-  private lazy val sq: SQ =
+  final def sq: SQ =
     SQ(linesOfType(LineType.SQ).head)
 
   @inline
   final def sequenceHeader: SequenceHeader =
     sq.sequenceHeader
 
-  private lazy val sd: SequenceData =
+  final def sd: SequenceData =
     SequenceData(linesOfType(LineType.`  `))
 
   @inline
   final def sequence: Sequence =
     sd.sequence
 
-
-
-  private def linesOfType(lt: LineType) =
-    (allLines filter Line.isOfType(lt)).map(Line.contentOf)
+  @inline
+  final def linesOfType(lt: LineType) =
+    allLines
+      .dropWhile(l => !(l startsWith lt.asString))
+      .takeWhile(_ startsWith lt.asString)
+      .map(_ drop 5)
+    // allLines collect { case l if(l startsWith lt.toString) => l drop 5 }
 }
 
 case object Entry {
 
+  @inline
   def from(lns: Seq[String]): Entry =
     Entry(lns)
 }
@@ -148,6 +153,7 @@ case object Entry {
 
 
 
+[test/scala/LineParsingSpeed.scala]: ../../../test/scala/LineParsingSpeed.scala.md
 [test/scala/lines.scala]: ../../../test/scala/lines.scala.md
 [test/scala/testData.scala]: ../../../test/scala/testData.scala.md
 [test/scala/FlatFileEntry.scala]: ../../../test/scala/FlatFileEntry.scala.md

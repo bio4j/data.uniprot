@@ -1,0 +1,7 @@
+Everyone should update.
+
+- Add all resource abbreviations; some where missing from UniProt docs
+- Fix several bugs on OG line parsing
+- Several speed improvements, parsing an entry is now 3x faster
+- Remove better files dep #13
+- Better release-level tests, including full parsing of SwissProt data

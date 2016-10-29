@@ -16,6 +16,7 @@ case class KW(val lines: Seq[String]) extends AnyVal {
 
 
 
+[test/scala/LineParsingSpeed.scala]: ../../../test/scala/LineParsingSpeed.scala.md
 [test/scala/lines.scala]: ../../../test/scala/lines.scala.md
 [test/scala/testData.scala]: ../../../test/scala/testData.scala.md
 [test/scala/FlatFileEntry.scala]: ../../../test/scala/FlatFileEntry.scala.md
