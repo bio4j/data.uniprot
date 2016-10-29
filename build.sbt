@@ -6,7 +6,8 @@ description   := "data.uniprot project"
 bucketSuffix  := "era7.com"
 
 // shows time for each test:
-testOptions in Test += Tests.Argument("-oD")
+testOptions       in Test += Tests.Argument("-oD")
+parallelExecution in Test := false
 
 wartremoverErrors in (Compile, compile) := Seq()
 wartremoverErrors in (Test, compile) := Seq()
