@@ -414,6 +414,7 @@ class Lines extends FunSuite {
 
 
 
+[test/scala/LineParsingSpeed.scala]: LineParsingSpeed.scala.md
 [test/scala/lines.scala]: lines.scala.md
 [test/scala/testData.scala]: testData.scala.md
 [test/scala/FlatFileEntry.scala]: FlatFileEntry.scala.md

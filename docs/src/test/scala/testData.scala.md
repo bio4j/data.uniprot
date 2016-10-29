@@ -12,6 +12,9 @@ case object testData {
   def swissProtLines =
     swissProtFile.getLines
 
+  final def entries =
+    bio4j.data.uniprot.flat.parsers.entries(testData.swissProtLines).map(bio4j.data.uniprot.flat.Entry.from)
+
   lazy val entryLines: Vector[String] =
     entry.split('\n').dropWhile(_.isEmpty).toVector
 
@@ -172,6 +175,7 @@ SQ   SEQUENCE   589 AA;  66839 MW;  D4CF69E0E818A988 CRC64;
 
 
 
+[test/scala/LineParsingSpeed.scala]: LineParsingSpeed.scala.md
 [test/scala/lines.scala]: lines.scala.md
 [test/scala/testData.scala]: testData.scala.md
 [test/scala/FlatFileEntry.scala]: FlatFileEntry.scala.md
