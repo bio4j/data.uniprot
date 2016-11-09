@@ -1,0 +1,1 @@
+This release add isoform sequence type and parsing from the corresponding fasta. See #20.
