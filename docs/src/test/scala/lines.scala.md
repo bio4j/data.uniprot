@@ -415,6 +415,7 @@ class Lines extends FunSuite {
 
 
 [test/scala/LineParsingSpeed.scala]: LineParsingSpeed.scala.md
+[test/scala/IsoformSequences.scala]: IsoformSequences.scala.md
 [test/scala/lines.scala]: lines.scala.md
 [test/scala/testData.scala]: testData.scala.md
 [test/scala/FlatFileEntry.scala]: FlatFileEntry.scala.md
@@ -422,6 +423,7 @@ class Lines extends FunSuite {
 [test/scala/FileReadSpeed.scala]: FileReadSpeed.scala.md
 [test/scala/SeqOps.scala]: SeqOps.scala.md
 [main/scala/entry.scala]: ../../main/scala/entry.scala.md
+[main/scala/isoformSequences.scala]: ../../main/scala/isoformSequences.scala.md
 [main/scala/flat/SequenceData.scala]: ../../main/scala/flat/SequenceData.scala.md
 [main/scala/flat/KW.scala]: ../../main/scala/flat/KW.scala.md
 [main/scala/flat/ID.scala]: ../../main/scala/flat/ID.scala.md
@@ -450,3 +452,4 @@ class Lines extends FunSuite {
 [main/scala/flat/lineTypes.scala]: ../../main/scala/flat/lineTypes.scala.md
 [main/scala/flat/RT.scala]: ../../main/scala/flat/RT.scala.md
 [main/scala/seqOps.scala]: ../../main/scala/seqOps.scala.md
+[main/scala/fasta/isoforms.scala]: ../../main/scala/fasta/isoforms.scala.md

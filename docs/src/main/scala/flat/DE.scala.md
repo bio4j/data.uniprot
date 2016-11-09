@@ -164,6 +164,7 @@ case object DE {
 
 
 [test/scala/LineParsingSpeed.scala]: ../../../test/scala/LineParsingSpeed.scala.md
+[test/scala/IsoformSequences.scala]: ../../../test/scala/IsoformSequences.scala.md
 [test/scala/lines.scala]: ../../../test/scala/lines.scala.md
 [test/scala/testData.scala]: ../../../test/scala/testData.scala.md
 [test/scala/FlatFileEntry.scala]: ../../../test/scala/FlatFileEntry.scala.md
@@ -171,6 +172,7 @@ case object DE {
 [test/scala/FileReadSpeed.scala]: ../../../test/scala/FileReadSpeed.scala.md
 [test/scala/SeqOps.scala]: ../../../test/scala/SeqOps.scala.md
 [main/scala/entry.scala]: ../entry.scala.md
+[main/scala/isoformSequences.scala]: ../isoformSequences.scala.md
 [main/scala/flat/SequenceData.scala]: SequenceData.scala.md
 [main/scala/flat/KW.scala]: KW.scala.md
 [main/scala/flat/ID.scala]: ID.scala.md
@@ -199,3 +201,4 @@ case object DE {
 [main/scala/flat/lineTypes.scala]: lineTypes.scala.md
 [main/scala/flat/RT.scala]: RT.scala.md
 [main/scala/seqOps.scala]: ../seqOps.scala.md
+[main/scala/fasta/isoforms.scala]: ../fasta/isoforms.scala.md

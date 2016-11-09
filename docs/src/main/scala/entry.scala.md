@@ -642,6 +642,7 @@ case class Sequence(val value: String) extends AnyVal
 
 
 [test/scala/LineParsingSpeed.scala]: ../../test/scala/LineParsingSpeed.scala.md
+[test/scala/IsoformSequences.scala]: ../../test/scala/IsoformSequences.scala.md
 [test/scala/lines.scala]: ../../test/scala/lines.scala.md
 [test/scala/testData.scala]: ../../test/scala/testData.scala.md
 [test/scala/FlatFileEntry.scala]: ../../test/scala/FlatFileEntry.scala.md
@@ -649,6 +650,7 @@ case class Sequence(val value: String) extends AnyVal
 [test/scala/FileReadSpeed.scala]: ../../test/scala/FileReadSpeed.scala.md
 [test/scala/SeqOps.scala]: ../../test/scala/SeqOps.scala.md
 [main/scala/entry.scala]: entry.scala.md
+[main/scala/isoformSequences.scala]: isoformSequences.scala.md
 [main/scala/flat/SequenceData.scala]: flat/SequenceData.scala.md
 [main/scala/flat/KW.scala]: flat/KW.scala.md
 [main/scala/flat/ID.scala]: flat/ID.scala.md
@@ -677,3 +679,4 @@ case class Sequence(val value: String) extends AnyVal
 [main/scala/flat/lineTypes.scala]: flat/lineTypes.scala.md
 [main/scala/flat/RT.scala]: flat/RT.scala.md
 [main/scala/seqOps.scala]: seqOps.scala.md
+[main/scala/fasta/isoforms.scala]: fasta/isoforms.scala.md

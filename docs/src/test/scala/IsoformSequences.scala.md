@@ -3,44 +3,28 @@
 package bio4j.data.uniprot.test
 
 import org.scalatest.FunSuite
-
-import bio4j.data.uniprot._
+import org.scalatest.concurrent.TimeLimitedTests
+import org.scalatest.time.SpanSugar._
+// import bio4j.test.ReleaseOnlyTest
+import com.bio4j.data.uniprot._
 import java.time.LocalDate
+import ohnosequences.fastarious
 
-class FlatFileEntry extends FunSuite {
+class IsoformSequences extends FunSuite with TimeLimitedTests {
 
-  test("can parse sample entry") {
+  def fastaLines =
+    io.Source.fromFile("uniprot_sprot_varsplic.fasta").getLines
 
-    val e =
-      flat.Entry from testData.entryLines
+  def timeLimit = 2 seconds
 
-    // ID line
-    assert { e.identification.entryName == "ZWILC_MOUSE" }
-    assert { e.identification.status == Reviewed }
-    assert { e.identification.length == 589 }
-    // AC line
-    assert { e.accessionNumbers.primary == "Q8R060" }
-    assert { e.accessionNumbers.secondary == Seq("Q9D2E4", "Q9D761") }
-    // DT line
-    assert { e.date.creation == LocalDate.of(2008, 1, 15) }
-    assert { e.date.sequenceLastModified == VersionedDate(LocalDate.of(2002, 6, 1), 1) }
-    assert { e.date.entryLastModified == VersionedDate(LocalDate.of(2016, 9, 7), 95) }
-    // DE line
-    assert {
-      e.description == Description(
-        Some(RecommendedName("Protein zwilch homolog", Seq(), Seq())),
-        Seq(),
-        Seq()
-      )
-    }
-    // sequence line
-    assert {
-      e.sequence === Sequence(
-        "MWSRMNRAAEEFYARLRQEFNEEKKGASKDPFIYEADVQVQLISKGQPSLLKTILNENDSVFLVEKVVLEKEETSQVEELQSEETAISDLSAGENIRPLALPVGRARQLIGLYTMAHNPNMTHLKIKQPVTALPPLWVRCDGSDPEGTCWLGAELITTNDIIAGVILYVLTCKADKNYSEDLENLKTSHKKRHHVSAVTARGFAQYELFKSDDLDDTVAPSQTTVTLDLSWSPVDEMLQTPPLSSTAALNIRVQSGESRGCLSHLHRELKFLLVLADGIRTGVTEWLEPLETKSALEFVQEFLNDLNKLDEFDDSTKKDKQKEAVNHDAAAVVRSMLLTVRGDLDFAEQLWCRMSSSVVSYQDLVKCFTLILQSLQRGDIQPWLHSGSNSLLSKLIHQSYHGAMDSVPLSGTTPLQMLLEIGLDKLKKDYISFFVSQELASLNHLEYFISPSVSTQEQVCRVQKLHHILEILVICMLFIKPQHELLFSLTQSCIKYYKQNPLDEQHIFQLPVRPAAVKNLYQSEKPQKWRVELSNSQKRVKTVWQLSDSSPVDHSSFHRPEFPELTLNGSLEERTAFVNMLTCSQVHFK"
-      )
+  test("parse all isoform sequences") {
+
+    fasta.isoformSequences.fromLines(fastaLines) foreach { isoSeq =>
+
+      val id        = isoSeq.ID
+      val sequence  = isoSeq.sequence
     }
   }
-
 }
 
 ```
