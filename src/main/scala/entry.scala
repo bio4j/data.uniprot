@@ -129,33 +129,36 @@ sealed trait Comment               extends Any
     val isEntry : Boolean
   ) extends Comment
   /* All this classes contain more information than a simple text; the format, however, is loosely defined. */
-  case class BiophysicochemicalProperties(val text: String)   extends AnyVal with Comment
-  case class Biotechnology(val text: String)                  extends AnyVal with Comment
-  case class CatalyticActivity(val text: String)              extends AnyVal with Comment
-  case class Caution(val text: String)                        extends AnyVal with Comment
-  case class Cofactor(val text: String)                       extends AnyVal with Comment
-  case class DevelopmentalStage(val text: String)             extends AnyVal with Comment
-  case class Disease(val text: String)                        extends AnyVal with Comment
-  case class DisruptionPhenotype(val text: String)            extends AnyVal with Comment
-  case class Domain(val text: String)                         extends AnyVal with Comment
-  case class EnzymeRegulation(val text: String)               extends AnyVal with Comment
-  case class Function(val text: String)                       extends AnyVal with Comment
-  case class Induction(val text: String)                      extends AnyVal with Comment
-  case class Interaction(val text: String)                    extends AnyVal with Comment
-  case class MassSpectrometry(val text: String)               extends AnyVal with Comment
-  case class Miscellaneous(val text: String)                  extends AnyVal with Comment
-  case class Pathway(val text: String)                        extends AnyVal with Comment
-  case class Pharmaceutical(val text: String)                 extends AnyVal with Comment
-  case class Polymorphism(val text: String)                   extends AnyVal with Comment
-  case class PTM(val text: String)                            extends AnyVal with Comment
-  case class RNAEditing(val text: String)                     extends AnyVal with Comment
-  case class SequenceCaution(val text: String)                extends AnyVal with Comment
-  case class Similarity(val text: String)                     extends AnyVal with Comment
-  case class SubcellularLocation(val text: String)            extends AnyVal with Comment
-  case class Subunit(val text: String)                        extends AnyVal with Comment
-  case class TissueSpecificity(val text: String)              extends AnyVal with Comment
-  case class ToxicDose(val text: String)                      extends AnyVal with Comment
-  case class WebResource(val text: String)                    extends AnyVal with Comment
+  sealed trait TextualComment extends Any with Comment {
+    def text: String
+  }
+  case class BiophysicochemicalProperties(val text: String)   extends AnyVal with TextualComment
+  case class Biotechnology(val text: String)                  extends AnyVal with TextualComment
+  case class CatalyticActivity(val text: String)              extends AnyVal with TextualComment
+  case class Caution(val text: String)                        extends AnyVal with TextualComment
+  case class Cofactor(val text: String)                       extends AnyVal with TextualComment
+  case class DevelopmentalStage(val text: String)             extends AnyVal with TextualComment
+  case class Disease(val text: String)                        extends AnyVal with TextualComment
+  case class DisruptionPhenotype(val text: String)            extends AnyVal with TextualComment
+  case class Domain(val text: String)                         extends AnyVal with TextualComment
+  case class EnzymeRegulation(val text: String)               extends AnyVal with TextualComment
+  case class Function(val text: String)                       extends AnyVal with TextualComment
+  case class Induction(val text: String)                      extends AnyVal with TextualComment
+  case class Interaction(val text: String)                    extends AnyVal with TextualComment
+  case class MassSpectrometry(val text: String)               extends AnyVal with TextualComment
+  case class Miscellaneous(val text: String)                  extends AnyVal with TextualComment
+  case class Pathway(val text: String)                        extends AnyVal with TextualComment
+  case class Pharmaceutical(val text: String)                 extends AnyVal with TextualComment
+  case class Polymorphism(val text: String)                   extends AnyVal with TextualComment
+  case class PTM(val text: String)                            extends AnyVal with TextualComment
+  case class RNAEditing(val text: String)                     extends AnyVal with TextualComment
+  case class SequenceCaution(val text: String)                extends AnyVal with TextualComment
+  case class Similarity(val text: String)                     extends AnyVal with TextualComment
+  case class SubcellularLocation(val text: String)            extends AnyVal with TextualComment
+  case class Subunit(val text: String)                        extends AnyVal with TextualComment
+  case class TissueSpecificity(val text: String)              extends AnyVal with TextualComment
+  case class ToxicDose(val text: String)                      extends AnyVal with TextualComment
+  case class WebResource(val text: String)                    extends AnyVal with TextualComment
 
 
 /* http://web.expasy.org/docs/userman.html#DR_line */
